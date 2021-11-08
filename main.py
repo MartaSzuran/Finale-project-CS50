@@ -1,6 +1,7 @@
 import sys
 import pygame
 import pygame.freetype
+import random
 
 from settings import Settings
 from ship import Ship
@@ -98,17 +99,35 @@ def main_menu():
 def game():
     # creating ship object
     ship = Ship(screen)
-    missile = Missile(screen)
+
+    # creating many missiles
+    missiles = []
+    missile_x = 1040
+    missile_ys = [400, 450, 500, 550, 650]
+
+    for missile in range(5):
+        speed = random.randint(1, 2)
+        missile_y = random.choice(missile_ys)
+        missile = Missile(screen, missile_x, missile_y, speed)
+        missiles.append(missile)
+        for y in missile_ys:
+            if y == missile_y:
+                missile_ys.remove(y)
+
     running = True
     while running:
         # screen refreshment
         screen.fill((102, 255, 255))
 
-        # add name to the game screen
-        draw_text("Game", my_font, (102, 102, 255), screen, 535, 70)
+        # add score to the right top of the screen
+        draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
 
+        # show the ship on the game screen
         ship.show_ship(60, 500)
-        missile.show_missile(1040, 600)
+
+        # show missiles on the game screen
+        for missile in missiles:
+            missile.show_missile()
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
