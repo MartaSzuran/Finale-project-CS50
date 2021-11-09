@@ -1,11 +1,12 @@
 import sys
 import pygame
-import pygame.freetype
+import pygame.font
+from pygame.sprite import Group
 import random
 
 from settings import Settings
 from ship import Ship
-from missile import Missile
+from missile import Missile, Explosion
 
 # know more about the clocks
 mainClock = pygame.time.Clock()
@@ -13,7 +14,7 @@ pygame.init()
 
 # create new object on which I can call the render method.
 # or use pygame.freetype.Font if the font is inside my director
-my_font = pygame.font.SysFont(None, 40)
+my_font = pygame.font.SysFont("Times New Roman", 30)
 
 # Settings object
 ai_settings = Settings()
@@ -100,19 +101,15 @@ def game():
     # creating ship object
     ship = Ship(screen)
 
-    # creating many missiles
-    missiles = []
-    missile_x = 1040
-    missile_ys = [400, 450, 500, 550, 650]
+    # creating group of missiles
+    missiles = Group()
+    missile = Missile(screen, 1040, 450, 4)
+    missiles.add(missile)
 
-    for missile in range(5):
-        speed = random.randint(1, 2)
-        missile_y = random.choice(missile_ys)
-        missile = Missile(screen, missile_x, missile_y, speed)
-        missiles.append(missile)
-        for y in missile_ys:
-            if y == missile_y:
-                missile_ys.remove(y)
+    # creating an explosion image
+    explosion = Explosion(screen)
+    # explosion time to blit
+    time_to_blit = None
 
     running = True
     while running:
@@ -125,9 +122,21 @@ def game():
         # show the ship on the game screen
         ship.show_ship(60, 500)
 
-        # show missiles on the game screen
-        for missile in missiles:
+        for missile in missiles.copy():
             missile.show_missile()
+            missiles.update()
+            if missile.position_x == 160:
+                # missile come close to the ship missile remove
+                missiles.remove(missile)
+                # it doesn't work - think about it later
+                time_to_blit = pygame.time.get_ticks() + 5000
+                explosion.show_explosion(missile.position_x, missile.position_y, time_to_blit)
+                # after removing create another missile and add it to the missile group
+                missile = Missile(screen, 1040, 450, 4)
+                missiles.add(missile)
+        # follow number of missiles in missiles group
+        print(len(missiles))
+
 
         # waiting for press button or mouse button
         for event in pygame.event.get():

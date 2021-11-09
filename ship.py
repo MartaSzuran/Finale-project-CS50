@@ -15,3 +15,4 @@ class Ship:
     def show_ship(self, position_x, position_y):
         """Drawing ship on the screen."""
         self.screen.blit(self.image, (position_x, position_y))
+
