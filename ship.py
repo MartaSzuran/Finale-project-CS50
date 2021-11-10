@@ -12,7 +12,7 @@ class Ship:
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
-    def show_ship(self, position_x, position_y):
+    def draw(self, position_x, position_y):
         """Drawing ship on the screen."""
         self.screen.blit(self.image, (position_x, position_y))
 
