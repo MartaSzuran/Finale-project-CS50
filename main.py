@@ -1,41 +1,18 @@
 import sys
 import pygame
-import pygame.font
 from pygame.sprite import Group
-import random
+from sprites import Missile, Explosion, draw_text, my_font,Ship
 
-from settings import Settings
-from ship import Ship
-from missile import Missile, Explosion
-
-# know more about the clocks
+# get to know more about the clocks
 mainClock = pygame.time.Clock()
 pygame.init()
 
-# create new object on which I can call the render method.
-# or use pygame.freetype.Font if the font is inside my director
-my_font = pygame.font.SysFont("Times New Roman", 30)
-
-# Settings object
-ai_settings = Settings()
-screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height), 0, 32)
+# create screen
+screen = pygame.display.set_mode((1200, 800), 0, 32)
 pygame.display.set_caption("Shoot the words")
 
 # adding variable click to control players clicking
 click = False
-
-
-def draw_text(text, font, color, surface, x, y):
-    # drawing text by creating local variable text_surface
-    # font.render (text = what we want to say, 1 (or True) = is for anti-aliasing, color = text color)
-    text_surface = font.render(text, 1, color)
-    # getting dimensions of the rect
-    text_rect = text_surface.get_rect()
-    # text position inside rectangular = assigns an x and y position to the center of the rectangle
-    # we can also use f.e. topleft
-    text_rect.topleft = (x, y)
-    # put text onto our canvas
-    surface.blit(text_surface, text_rect)
 
 
 def main_menu():
@@ -131,11 +108,18 @@ def game():
         explosion.draw(current_time)
 
         for missile in missiles.copy():
+            # show missile on the screen
             missile.show_missile()
+            # move the missile
             missiles.update()
+            # draw letter above the missile
+            missile.draw_letter()
+
             if missile.position_x == 160:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
+                # explosion.create function takes current positions and current time of missile remove event
+                # to create longer blow effect
                 explosion.create(position_x=missile.position_x,
                                  position_y=missile.position_y,
                                  time=current_time)
@@ -148,8 +132,10 @@ def game():
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     # escape to main menu
@@ -165,6 +151,7 @@ def game():
 # show rating screen
 def rating():
     running = True
+
     while running:
         # screen refreshment
         screen.fill((102, 255, 255))
@@ -174,8 +161,10 @@ def rating():
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT:
                 sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     # escape to main menu
