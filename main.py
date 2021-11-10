@@ -110,6 +110,8 @@ def game():
     # creating an explosion object
     explosion = Explosion(screen)
 
+    ship.create(pygame.time.get_ticks())
+
     running = True
     while running:
 
@@ -123,7 +125,7 @@ def game():
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
 
         # draw the ship on the game screen
-        ship.draw(60, 500)
+        ship.draw(current_time)
 
         # draw the explosion
         explosion.draw(current_time)
