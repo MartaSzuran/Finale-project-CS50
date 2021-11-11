@@ -27,6 +27,7 @@ def draw_text(text, font, color, surface, x, y):
 def choose_the_letter():
     # create list of alphabet letters
     letters = list(string.ascii_lowercase)
+    #print(len(letters))
     letter = random.choice(letters)
     return letter
 

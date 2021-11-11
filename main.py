@@ -1,6 +1,8 @@
 import sys
 import pygame
 from pygame.sprite import Group
+
+import sprites
 from sprites import Missile, Explosion, draw_text, my_font,Ship
 
 # get to know more about the clocks
@@ -140,6 +142,11 @@ def game():
                 if event.key == pygame.K_ESCAPE:
                     # escape to main menu
                     running = False
+
+            # get the event of user pressing the button, and compare it with the key letter
+            if event.type == pygame.KEYDOWN:
+                if pygame.key.name(event.key) == missile.letter:
+                    print(pygame.key.name(event.key))
 
         # display last changed screen
         pygame.display.update()
