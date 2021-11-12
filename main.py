@@ -3,7 +3,7 @@ import pygame
 from pygame.sprite import Group
 
 import sprites
-from sprites import Missile, Explosion, draw_text, my_font,Ship
+from sprites import Missile, Explosion, draw_text, my_font, Ship
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -91,9 +91,10 @@ def game():
 
     ship.create(pygame.time.get_ticks())
 
+    # control if player want to play
     running = True
-    while running:
 
+    while running:
         # track current time
         current_time = pygame.time.get_ticks()
 
@@ -117,7 +118,7 @@ def game():
             # draw letter above the missile
             missile.draw_letter()
 
-            if missile.position_x == 160:
+            if missile.position_x == 160 or missile.right_letter:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
                 # explosion.create function takes current positions and current time of missile remove event
@@ -146,6 +147,7 @@ def game():
             # get the event of user pressing the button, and compare it with the key letter
             if event.type == pygame.KEYDOWN:
                 if pygame.key.name(event.key) == missile.letter:
+                    missile.player_key()
                     print(pygame.key.name(event.key))
 
         # display last changed screen

@@ -18,7 +18,7 @@ def draw_text(text, font, color, surface, x, y):
     # getting dimensions of the rect
     text_rect = text_surface.get_rect()
     # text position inside rectangular = assigns an x and y position to the center of the rectangle
-    # we can also use f.e. topleft
+    # we can also use f.e. top left
     text_rect.topleft = (x, y)
     # put text onto our canvas
     surface.blit(text_surface, text_rect)
@@ -27,7 +27,7 @@ def draw_text(text, font, color, surface, x, y):
 def choose_the_letter():
     # create list of alphabet letters
     letters = list(string.ascii_lowercase)
-    #print(len(letters))
+    # print(len(letters))
     letter = random.choice(letters)
     return letter
 
@@ -35,6 +35,7 @@ def choose_the_letter():
 class Missile(Sprite):
     # pass chosen letter to the Missile object
     letter = choose_the_letter()
+    right_letter = False
     """Creating missiles flying into the ship,"""
     def __init__(self, screen, position_x, position_y, missile_speed_factor):
         """Initialize missiles."""
@@ -62,7 +63,15 @@ class Missile(Sprite):
         # choose different font
         letters_font = pygame.font.SysFont("Sans", 40)
         # use draw_text to create a letter above the missile
-        draw_text(self.letter, letters_font, (0, 0, 0), self.screen, self.position_x+20, self.position_y-20)
+        if self.right_letter:
+            draw_text(self.letter, letters_font, (0, 255, 0), self.screen, self.position_x+20, self.position_y-20)
+        else:
+            draw_text(self.letter, letters_font, (0, 0, 0), self.screen, self.position_x + 20, self.position_y - 20)
+            self.right_letter = False
+
+    def player_key(self):
+        self.right_letter = True
+        return self.right_letter
 
 
 # change the image or get to know how to make image background transparent
@@ -89,7 +98,7 @@ class Explosion:
         current_time = time
         # if difference between current_time and time taken from missile.remove() function
         # is bigger than 300 stop drawing image
-        if (current_time - self.time) > 300:
+        if (current_time - self.time) > 200:
             self.draw_image = False
 
         # if draw_image in True draw image
