@@ -3,7 +3,7 @@ import pygame
 from pygame.sprite import Group
 
 import sprites
-from sprites import Missile, Explosion, draw_text, my_font, Ship
+from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -83,13 +83,14 @@ def game():
 
     # creating group of missiles objects
     missiles = Group()
-    missile = Missile(screen, 1040, 450, 4)
+    missile = Missile(screen, 1040, 450)
     missiles.add(missile)
 
     # creating an explosion object
     explosion = Explosion(screen)
 
     ship.create(pygame.time.get_ticks())
+    letter = Letter(screen, missile.position_x, missile.position_y, sprites.choose_the_letter())
 
     # control if player want to play
     running = True
@@ -115,10 +116,12 @@ def game():
             missile.show_missile()
             # move the missile
             missiles.update()
-            # draw letter above the missile
-            missile.draw_letter()
 
-            if missile.position_x == 160 or missile.right_letter:
+            # draw letter above the missile
+            letter.draw((0, 0, 0,))
+            letter.update()
+
+            if missile.position_x == 160:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
                 # explosion.create function takes current positions and current time of missile remove event
@@ -127,7 +130,7 @@ def game():
                                  position_y=missile.position_y,
                                  time=current_time)
                 # after removing create another missile and add it to the missile group
-                missile = Missile(screen, 1040, 450, 4)
+                missile = Missile(screen, 1040, 450)
                 missiles.add(missile)
 
         # follow number of missiles in missiles group in terminal window
@@ -145,10 +148,10 @@ def game():
                     running = False
 
             # get the event of user pressing the button, and compare it with the key letter
-            if event.type == pygame.KEYDOWN:
-                if pygame.key.name(event.key) == missile.letter:
-                    missile.player_key()
-                    print(pygame.key.name(event.key))
+            #if event.type == pygame.KEYDOWN:
+                #if pygame.key.name(event.key) == letter.letter:
+                    #missile.player_key()
+                    #print(pygame.key.name(event.key))
 
         # display last changed screen
         pygame.display.update()

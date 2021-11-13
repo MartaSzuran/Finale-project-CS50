@@ -32,15 +32,38 @@ def choose_the_letter():
     return letter
 
 
+# SPEED variable for all sprites
+SPEED = 4
+
+
+class Letter(Sprite):
+    """Create letter object."""
+    def __init__(self, screen, position_x, position_y, letter):
+        super().__init__()
+        self.screen = screen
+        self.letter = letter
+        self.position_x = position_x
+        self.position_y = position_y
+
+    def update(self):
+        # move missile to the left with particular speed
+        self.position_x -= SPEED
+
+    def draw(self, color):
+        # draw one letter
+        # choose different font
+        letter_font = pygame.font.SysFont("Sans", 40)
+        # use draw_text to create a letter above the missile
+        draw_text(self.letter, letter_font, color, self.screen, self.position_x + 20,
+                  self.position_y - 20)
+
+
 class Missile(Sprite):
-    # pass chosen letter to the Missile object
-    letter = choose_the_letter()
-    right_letter = False
     """Creating missiles flying into the ship,"""
-    def __init__(self, screen, position_x, position_y, missile_speed_factor):
+    def __init__(self, screen, position_x, position_y):
+        super().__init__()
         """Initialize missiles."""
         # simple syntax super().__init__()
-        super(Missile, self).__init__()
         # creating missile
         self.screen = screen
         self.image = pygame.image.load("missile.png")
@@ -48,30 +71,15 @@ class Missile(Sprite):
         self.screen_rect = screen.get_rect()
 
         # position and speed
-        self.missile_speed_factor = missile_speed_factor
         self.position_x = position_x
         self.position_y = position_y
 
     def update(self):
         # move missile to the left with particular speed
-        self.position_x -= self.missile_speed_factor
+        self.position_x -= SPEED
 
     def show_missile(self):
         self.screen.blit(self.image, (self.position_x, self.position_y))
-
-    def draw_letter(self):
-        # choose different font
-        letters_font = pygame.font.SysFont("Sans", 40)
-        # use draw_text to create a letter above the missile
-        if self.right_letter:
-            draw_text(self.letter, letters_font, (0, 255, 0), self.screen, self.position_x+20, self.position_y-20)
-        else:
-            draw_text(self.letter, letters_font, (0, 0, 0), self.screen, self.position_x + 20, self.position_y - 20)
-            self.right_letter = False
-
-    def player_key(self):
-        self.right_letter = True
-        return self.right_letter
 
 
 # change the image or get to know how to make image background transparent
