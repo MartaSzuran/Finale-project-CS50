@@ -124,6 +124,8 @@ def game():
             if missile.position_x == 160:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
+                letter.kill()
+
                 # explosion.create function takes current positions and current time of missile remove event
                 # to create longer blow effect
                 explosion.create(position_x=missile.position_x,
@@ -132,6 +134,8 @@ def game():
                 # after removing create another missile and add it to the missile group
                 missile = Missile(screen, 1040, 450)
                 missiles.add(missile)
+
+                letter = Letter(screen, missile.position_x, missile.position_y, sprites.choose_the_letter())
 
         # follow number of missiles in missiles group in terminal window
         # print(len(missiles))
