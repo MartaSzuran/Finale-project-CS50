@@ -27,9 +27,17 @@ def draw_text(text, font, color, surface, x, y):
 def choose_the_letter():
     # create list of alphabet letters
     letters = list(string.ascii_lowercase)
-    # print(len(letters))
-    letter = random.choice(letters)
-    return letter
+
+    # create list of letter above the missile
+    key_letters = []
+
+    # add randomly chosen letters to the list of missile letters
+    # later add rounds which control quantity of letters in word
+    for letter in range(2):
+        letter = random.choice(letters)
+        key_letters.append(letter)
+        # print(len(letters))
+    return key_letters
 
 
 # SPEED variable for all sprites
@@ -37,6 +45,7 @@ SPEED = 4
 
 
 class Letter(Sprite):
+    pressed_letter = False
     """Create letter object."""
     def __init__(self, screen, position_x, position_y, letter):
         super().__init__()
@@ -49,13 +58,22 @@ class Letter(Sprite):
         # move missile to the left with particular speed
         self.position_x -= SPEED
 
-    def draw(self, color):
+    def draw(self):
         # draw one letter
         # choose different font
         letter_font = pygame.font.SysFont("Sans", 40)
         # use draw_text to create a letter above the missile
-        draw_text(self.letter, letter_font, color, self.screen, self.position_x + 20,
-                  self.position_y - 20)
+        # check if user pressed the letter on the keyboard if he has set color to green, otherwise black
+        if self.pressed_letter:
+            draw_text(self.letter, letter_font, (0, 255, 0), self.screen, self.position_x + 10,
+                      self.position_y - 20)
+        else:
+            draw_text(self.letter, letter_font, (0, 0, 0), self.screen, self.position_x + 10,
+                      self.position_y - 20)
+
+    def change_color(self, pressed_letter):
+        self.pressed_letter = True
+        return pressed_letter
 
 
 class Missile(Sprite):
@@ -78,7 +96,7 @@ class Missile(Sprite):
         # move missile to the left with particular speed
         self.position_x -= SPEED
 
-    def show_missile(self):
+    def draw(self):
         self.screen.blit(self.image, (self.position_x, self.position_y))
 
 

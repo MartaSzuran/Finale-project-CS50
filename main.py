@@ -76,6 +76,31 @@ def main_menu():
         mainClock.tick(60)
 
 
+def create_letters(position_x, position_y):
+    # make objects of class letters
+    # equal to the length of key_letters list
+    letters_list = sprites.choose_the_letter()
+    # parameter to change position_x of each letter
+    change_x = -10
+    # create list of letters object
+    letters_obj = Group()
+    for letter in letters_list:
+        # control the way letters obj are draw on the screen by changing position_x
+        if letter in ["w", "m"]:
+            letter = Letter(screen, (position_x + change_x), position_y, letter)
+            letters_obj.add(letter)
+            change_x += 30
+        elif letter in ["i", "j", "l"]:
+            letter = Letter(screen, (position_x + change_x), position_y, letter)
+            letters_obj.add(letter)
+            change_x += 18
+        else:
+            letter = Letter(screen, (position_x + change_x), position_y, letter)
+            letters_obj.add(letter)
+            change_x += 23
+    return letters_obj
+
+
 # game
 def game():
     # creating ship object
@@ -89,8 +114,10 @@ def game():
     # creating an explosion object
     explosion = Explosion(screen)
 
+    # take time to move the ship up and down
     ship.create(pygame.time.get_ticks())
-    letter = Letter(screen, missile.position_x, missile.position_y, sprites.choose_the_letter())
+
+    missile_letters = create_letters(missile.position_x, missile.position_y)
 
     # control if player want to play
     running = True
@@ -113,18 +140,22 @@ def game():
 
         for missile in missiles.copy():
             # show missile on the screen
-            missile.show_missile()
+            missile.draw()
             # move the missile
             missiles.update()
 
             # draw letter above the missile
-            letter.draw((0, 0, 0,))
-            letter.update()
+            for letter in missile_letters.copy():
+                letter.draw()
+                letter.update()
 
             if missile.position_x == 160:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
-                letter.kill()
+
+                # remove the letters with the missile
+                for letter in missile_letters.copy():
+                    letter.kill()
 
                 # explosion.create function takes current positions and current time of missile remove event
                 # to create longer blow effect
@@ -135,7 +166,7 @@ def game():
                 missile = Missile(screen, 1040, 450)
                 missiles.add(missile)
 
-                letter = Letter(screen, missile.position_x, missile.position_y, sprites.choose_the_letter())
+                missile_letters = create_letters(missile.position_x, missile.position_y)
 
         # follow number of missiles in missiles group in terminal window
         # print(len(missiles))
