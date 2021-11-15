@@ -1,7 +1,6 @@
 import sys
 import pygame
 from pygame.sprite import Group
-import math
 
 import sprites
 from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter
@@ -219,7 +218,7 @@ def game():
 
                 # I don't have to remove letters from word because I overwrite thar list
                 word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
-                print(numb_of_letters)
+                # print(numb_of_letters)
 
         # print(len(missiles))
 

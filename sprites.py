@@ -39,7 +39,9 @@ def choose_the_letter(number):
     return key_letters
 
 
-SPEED = 3
+# remember when changing speed the position_x need to be divide by it f.e. 160/ 2,
+# if 160/3 the missile will fly away
+SPEED = 2
 
 
 class Letter(Sprite):
