@@ -3,7 +3,7 @@ import pygame
 from pygame.sprite import Group
 
 import sprites
-from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter
+from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter, Lives
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -144,6 +144,11 @@ def game():
     missile = Missile(screen, 1040, 450)
     missiles.add(missile)
 
+    # add lives to the screen
+    heart_1 = Lives(screen)
+    heart_2 = Lives(screen)
+    heart_3 = Lives(screen)
+
     # creating an explosion object
     explosion = Explosion(screen)
 
@@ -183,6 +188,11 @@ def game():
         draw_text(str(score), my_font, (102, 102, 255), screen, 1120, 30)
         timer = current_time*0.001
         draw_text(str(round(timer, 1)), my_font, (102, 102, 255), screen, 20, 30)
+
+        # draw lives
+        heart_1.draw(540)
+        heart_2.draw(590)
+        heart_3.draw(640)
 
         # draw the ship on the game screen
         ship.draw(current_time)
