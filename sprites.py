@@ -26,22 +26,22 @@ def draw_text(text, font, color, surface, x, y):
 
 def choose_the_letter():
     # create list of alphabet letters
-    letters = list(string.ascii_lowercase)
+    alpha_letters = list(string.ascii_lowercase)
 
     # create list of letter above the missile
     key_letters = []
 
     # add randomly chosen letters to the list of missile letters
     # later add rounds which control quantity of letters in word
-    for letter in range(2):
-        letter = random.choice(letters)
+    for letter in range(4):
+        letter = random.choice(alpha_letters)
         key_letters.append(letter)
         # print(len(letters))
     return key_letters
 
 
 # SPEED variable for all sprites
-SPEED = 4
+SPEED = 2
 
 
 class Letter(Sprite):
@@ -71,9 +71,9 @@ class Letter(Sprite):
             draw_text(self.letter, letter_font, (0, 0, 0), self.screen, self.position_x + 10,
                       self.position_y - 20)
 
-    def change_color(self, pressed_letter):
+    def change_color(self):
         self.pressed_letter = True
-        return pressed_letter
+        return self.pressed_letter
 
 
 class Missile(Sprite):

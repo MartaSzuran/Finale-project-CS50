@@ -77,28 +77,51 @@ def main_menu():
 
 
 def create_letters(position_x, position_y):
-    # make objects of class letters
-    # equal to the length of key_letters list
-    letters_list = sprites.choose_the_letter()
+    """Make objects of class letters equal to the length of key_letters list"""
     # parameter to change position_x of each letter
     change_x = -10
+    # create list of randomly chosen letters objects
+    letters = sprites.choose_the_letter()
     # create list of letters object
-    letters_obj = Group()
-    for letter in letters_list:
+    letters_obj = []
+    for letter in letters:
         # control the way letters obj are draw on the screen by changing position_x
         if letter in ["w", "m"]:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
-            letters_obj.add(letter)
+            letters_obj.append(letter)
             change_x += 30
         elif letter in ["i", "j", "l"]:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
-            letters_obj.add(letter)
+            letters_obj.append(letter)
             change_x += 18
         else:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
-            letters_obj.add(letter)
+            letters_obj.append(letter)
             change_x += 23
     return letters_obj
+
+
+def create_collection_of_current_keys(collection_of_letters_objects):
+    # create list of keys
+    keys = []
+    for letter in collection_of_letters_objects:
+        key_letter = letter.letter
+        keys.append(key_letter)
+
+    return keys
+
+# add function to erase all colors if the wrong letter is pressed
+def check_key(collection_of_letters_objects, counter, bool_key):
+    if bool_key:
+        letter_counter = 0
+        for letter in collection_of_letters_objects:
+            if letter_counter < counter:
+                letter.pressed_letter = True
+            else:
+                letter.pressed_letter = False
+            letter_counter += 1
+        bool_key = False
+    return bool_key
 
 
 # game
@@ -117,11 +140,15 @@ def game():
     # take time to move the ship up and down
     ship.create(pygame.time.get_ticks())
 
-    missile_letters = create_letters(missile.position_x, missile.position_y)
+    word = create_letters(missile.position_x, missile.position_y)
+    # print(word)
+
+    # bool to check if the key is the same as pressed letter by the user
+    right_key = False
+    counter = 0
 
     # control if player want to play
     running = True
-
     while running:
         # track current time
         current_time = pygame.time.get_ticks()
@@ -145,17 +172,14 @@ def game():
             missiles.update()
 
             # draw letter above the missile
-            for letter in missile_letters.copy():
+            for letter in word:
                 letter.draw()
                 letter.update()
 
             if missile.position_x == 160:
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
-
-                # remove the letters with the missile
-                for letter in missile_letters.copy():
-                    letter.kill()
+                counter = 0
 
                 # explosion.create function takes current positions and current time of missile remove event
                 # to create longer blow effect
@@ -166,28 +190,53 @@ def game():
                 missile = Missile(screen, 1040, 450)
                 missiles.add(missile)
 
-                missile_letters = create_letters(missile.position_x, missile.position_y)
+                # I don't have to remove letters from word because I overwrite thar list
+                word = create_letters(missile.position_x, missile.position_y)
 
         # follow number of missiles in missiles group in terminal window
         # print(len(missiles))
+
+        # collections of keys
+        keys = create_collection_of_current_keys(word)
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 sys.exit()
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     # escape to main menu
                     running = False
-
             # get the event of user pressing the button, and compare it with the key letter
-            #if event.type == pygame.KEYDOWN:
-                #if pygame.key.name(event.key) == letter.letter:
-                    #missile.player_key()
-                    #print(pygame.key.name(event.key))
+            if event.type == pygame.KEYDOWN:
+                print(keys)
+                print(len(keys))
+                if counter >= (len(keys)-1):
+                    # create function for that code because it is repeated
+                    for missile in missiles.copy():
+                        missiles.remove(missile)
+                        counter = 0
 
+                        # explosion.create function takes current positions and current time of missile remove event
+                        # to create longer blow effect
+                        explosion.create(position_x=missile.position_x,
+                                         position_y=missile.position_y,
+                                         time=current_time)
+                        # after removing create another missile and add it to the missile group
+                        missile = Missile(screen, 1040, 450)
+                        missiles.add(missile)
+
+                        # I don't have to remove letters from word because I overwrite that list
+                        word = create_letters(missile.position_x, missile.position_y)
+                elif pygame.key.name(event.key) == keys[counter]:
+                    right_key = True
+                    counter += 1
+                    print(counter)
+                    print(keys[counter])
+                    print(pygame.key.name(event.key))
+
+        check_key(word, counter, right_key)
         # display last changed screen
         pygame.display.update()
 
