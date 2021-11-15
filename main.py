@@ -1,6 +1,7 @@
 import sys
 import pygame
 from pygame.sprite import Group
+import math
 
 import sprites
 from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter
@@ -76,12 +77,12 @@ def main_menu():
         mainClock.tick(60)
 
 
-def create_letters(position_x, position_y):
+def create_letters(position_x, position_y, numb):
     """Make objects of class letters equal to the length of key_letters list"""
     # parameter to change position_x of each letter
     change_x = -10
     # create list of randomly chosen letters objects
-    letters = sprites.choose_the_letter()
+    letters = sprites.choose_the_letter(numb)
     # create list of letters object
     letters_obj = []
     for letter in letters:
@@ -125,6 +126,15 @@ def check_key(collection_of_letters_objects, counter, bool_key):
     return bool_key
 
 
+def increase_dif_with_time(start_time, numb_of_letters, current_game_time):
+    difference = current_game_time-start_time
+    if difference > 10000:
+        numb_of_letters += 1
+        start_time = current_game_time
+        print("10 sec")
+    return numb_of_letters, start_time
+
+
 # game
 def game():
     # creating ship object
@@ -145,8 +155,13 @@ def game():
     right_key = False
     counter = 0
 
+    # starting point for number of letters
+    numb_of_letters = 1
+    # starting point for counting time
+    start_time = 0
+
     # create letter above the missile
-    word = create_letters(missile.position_x, missile.position_y)
+    word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
     # print(word)
 
     # initialize score value
@@ -157,6 +172,9 @@ def game():
     while running:
         # track current time
         current_time = pygame.time.get_ticks()
+        # print(current_time)
+
+        numb_of_letters, start_time = increase_dif_with_time(start_time, numb_of_letters, current_time)
 
         # screen refreshment
         screen.fill((102, 255, 255))
@@ -164,6 +182,8 @@ def game():
         # add score to the right top of the screen
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
         draw_text(str(score), my_font, (102, 102, 255), screen, 1120, 30)
+        timer = current_time*0.001
+        draw_text(str(round(timer, 1)), my_font, (102, 102, 255), screen, 20, 30)
 
         # draw the ship on the game screen
         ship.draw(current_time)
@@ -184,7 +204,7 @@ def game():
 
             if missile.position_x == 160:
                 score -= 20
-                print(score)
+                # print(score)
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
 
@@ -198,7 +218,8 @@ def game():
                 missiles.add(missile)
 
                 # I don't have to remove letters from word because I overwrite thar list
-                word = create_letters(missile.position_x, missile.position_y)
+                word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
+                print(numb_of_letters)
 
         # print(len(missiles))
 
@@ -224,6 +245,8 @@ def game():
                     counter += 1
                     # print(counter)
                     # print(pygame.key.name(event.key))
+                else:
+                    score -= 5
 
                 if counter == (len(keys)):
                     # create function for that code because it is repeated
@@ -231,7 +254,7 @@ def game():
                         missiles.remove(missile)
                         counter = 0
                         score += 10
-                        print(score)
+                        # print(score)
 
                         # explosion.create function takes current positions and current time of missile remove event
                         # to create longer blow effect
@@ -243,7 +266,8 @@ def game():
                         missiles.add(missile)
 
                         # I don't have to remove letters from word because I overwrite that list
-                        word = create_letters(missile.position_x, missile.position_y)
+                        word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
+                        print(numb_of_letters)
 
         # check_key function change the color of letters object
         check_key(word, counter, right_key)

@@ -24,7 +24,7 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(text_surface, text_rect)
 
 
-def choose_the_letter():
+def choose_the_letter(number):
     alpha_letters = list(string.ascii_lowercase)
 
     # create list of letter above the missile
@@ -32,15 +32,14 @@ def choose_the_letter():
 
     # add randomly chosen letters to the list of missile letters
     # later add rounds which control quantity of letters in word
-    for letter in range(1):
+    for letter in range(number):
         letter = random.choice(alpha_letters)
         key_letters.append(letter)
         # print(len(letters))
     return key_letters
 
 
-# SPEED variable for all sprites
-SPEED = 2
+SPEED = 3
 
 
 class Letter(Sprite):
