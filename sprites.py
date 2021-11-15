@@ -44,9 +44,10 @@ def choose_the_letter(number):
 SPEED = 2
 
 
-class Lives:
+class Lives(Sprite):
     """Create hearts objects on the screen."""
     def __init__(self, screen):
+        super().__init__()
         self.screen = screen
         # using .convert_alpha make image background transparent
         self.image = pygame.image.load("heart.png").convert_alpha()
@@ -54,6 +55,9 @@ class Lives:
         self.screen_rect = self.screen.get_rect()
         self.position_x = 550
         self.position_y = 30
+
+    def update(self):
+        self.kill()
 
     def draw(self, position_x):
         self.screen.blit(self.image, (position_x, self.position_y))

@@ -145,9 +145,10 @@ def game():
     missiles.add(missile)
 
     # add lives to the screen
-    heart_1 = Lives(screen)
-    heart_2 = Lives(screen)
-    heart_3 = Lives(screen)
+    hearts = Group()
+    for i in range(3):
+        heart = Lives(screen)
+        hearts.add(heart)
 
     # creating an explosion object
     explosion = Explosion(screen)
@@ -171,6 +172,9 @@ def game():
     # initialize score value
     score = 0
 
+    # number of missiles that hit the ship
+    missile_hit_the_ship = 0
+
     # control if player want to play
     running = True
     while running:
@@ -190,9 +194,13 @@ def game():
         draw_text(str(round(timer, 1)), my_font, (102, 102, 255), screen, 20, 30)
 
         # draw lives
-        heart_1.draw(540)
-        heart_2.draw(590)
-        heart_3.draw(640)
+        # add creating hearts and add it to the sprite group
+        # than use remove
+        x_pos = 540
+        for heart in hearts:
+            x_pos_different = 50
+            heart.draw(x_pos)
+            x_pos += x_pos_different
 
         # draw the ship on the game screen
         ship.draw(current_time)
@@ -212,6 +220,17 @@ def game():
                 letter.update()
 
             if missile.position_x == 160:
+                # count how many time missile get to the ship
+                missile_hit_the_ship += 1
+
+                # print(missile_hit_the_ship)
+                # if missile get to the ship remove one heart from the screen
+                if missile_hit_the_ship == 1:
+                    hearts.remove(heart)
+                elif missile_hit_the_ship == 2:
+                    hearts.remove(heart)
+                else:
+                    running = False
                 score -= 20
                 # print(score)
                 # missile come close to the ship missile remove
