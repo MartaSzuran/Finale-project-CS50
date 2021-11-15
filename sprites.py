@@ -25,7 +25,6 @@ def draw_text(text, font, color, surface, x, y):
 
 
 def choose_the_letter():
-    # create list of alphabet letters
     alpha_letters = list(string.ascii_lowercase)
 
     # create list of letter above the missile
@@ -33,7 +32,7 @@ def choose_the_letter():
 
     # add randomly chosen letters to the list of missile letters
     # later add rounds which control quantity of letters in word
-    for letter in range(4):
+    for letter in range(1):
         letter = random.choice(alpha_letters)
         key_letters.append(letter)
         # print(len(letters))
@@ -137,8 +136,6 @@ class Explosion:
         self.position_y = position_y
         self.time = time
         self.draw_image = True
-        # choose different letter to new Missile object
-        Missile.letter = choose_the_letter()
 
 
 class Ship:

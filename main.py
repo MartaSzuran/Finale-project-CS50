@@ -90,14 +90,14 @@ def create_letters(position_x, position_y):
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
             change_x += 30
-        elif letter in ["i", "j", "l"]:
+        elif letter in ["i", "j", "l", "t", "f"]:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
-            change_x += 18
+            change_x += 13
         else:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
-            change_x += 23
+            change_x += 25
     return letters_obj
 
 
@@ -109,6 +109,7 @@ def create_collection_of_current_keys(collection_of_letters_objects):
         keys.append(key_letter)
 
     return keys
+
 
 # add function to erase all colors if the wrong letter is pressed
 def check_key(collection_of_letters_objects, counter, bool_key):
@@ -140,12 +141,16 @@ def game():
     # take time to move the ship up and down
     ship.create(pygame.time.get_ticks())
 
-    word = create_letters(missile.position_x, missile.position_y)
-    # print(word)
-
     # bool to check if the key is the same as pressed letter by the user
     right_key = False
     counter = 0
+
+    # create letter above the missile
+    word = create_letters(missile.position_x, missile.position_y)
+    # print(word)
+
+    # initialize score value
+    score = 0
 
     # control if player want to play
     running = True
@@ -158,6 +163,7 @@ def game():
 
         # add score to the right top of the screen
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
+        draw_text(str(score), my_font, (102, 102, 255), screen, 1120, 30)
 
         # draw the ship on the game screen
         ship.draw(current_time)
@@ -177,13 +183,14 @@ def game():
                 letter.update()
 
             if missile.position_x == 160:
+                score -= 20
+                print(score)
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
-                counter = 0
 
                 # explosion.create function takes current positions and current time of missile remove event
                 # to create longer blow effect
-                explosion.create(position_x=missile.position_x,
+                explosion.create(position_x=missile.position_x+30,
                                  position_y=missile.position_y,
                                  time=current_time)
                 # after removing create another missile and add it to the missile group
@@ -193,7 +200,6 @@ def game():
                 # I don't have to remove letters from word because I overwrite thar list
                 word = create_letters(missile.position_x, missile.position_y)
 
-        # follow number of missiles in missiles group in terminal window
         # print(len(missiles))
 
         # collections of keys
@@ -210,17 +216,26 @@ def game():
                     running = False
             # get the event of user pressing the button, and compare it with the key letter
             if event.type == pygame.KEYDOWN:
-                print(keys)
-                print(len(keys))
-                if counter >= (len(keys)-1):
+                # print(keys)
+                # print(len(keys))
+
+                if pygame.key.name(event.key) == keys[counter]:
+                    right_key = True
+                    counter += 1
+                    # print(counter)
+                    # print(pygame.key.name(event.key))
+
+                if counter == (len(keys)):
                     # create function for that code because it is repeated
                     for missile in missiles.copy():
                         missiles.remove(missile)
                         counter = 0
+                        score += 10
+                        print(score)
 
                         # explosion.create function takes current positions and current time of missile remove event
                         # to create longer blow effect
-                        explosion.create(position_x=missile.position_x,
+                        explosion.create(position_x=missile.position_x+30,
                                          position_y=missile.position_y,
                                          time=current_time)
                         # after removing create another missile and add it to the missile group
@@ -229,16 +244,13 @@ def game():
 
                         # I don't have to remove letters from word because I overwrite that list
                         word = create_letters(missile.position_x, missile.position_y)
-                elif pygame.key.name(event.key) == keys[counter]:
-                    right_key = True
-                    counter += 1
-                    print(counter)
-                    print(keys[counter])
-                    print(pygame.key.name(event.key))
 
+        # check_key function change the color of letters object
         check_key(word, counter, right_key)
+
         # display last changed screen
         pygame.display.update()
+        # print(current_time)
 
         # clock
         mainClock.tick(60)
