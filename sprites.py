@@ -10,6 +10,10 @@ pygame.init()
 # or use pygame.freetype.Font if the font is inside my director
 my_font = pygame.font.SysFont("Times New Roman", 30)
 
+# remember when changing speed the position_x need to be divide by it f.e. 160/ 2,
+# if 160/3 the missile will fly away
+SPEED = 2
+
 
 def draw_text(text, font, color, surface, x, y):
     # drawing text by creating local variable text_surface
@@ -39,9 +43,20 @@ def choose_the_letter(number):
     return key_letters
 
 
-# remember when changing speed the position_x need to be divide by it f.e. 160/ 2,
-# if 160/3 the missile will fly away
-SPEED = 2
+class Waves(Sprite):
+    """Create waves class."""
+    def __init__(self, screen, image):
+        super().__init__()
+        self.screen = screen
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.screen_rect = self.screen.get_rect()
+
+    def update(self, position_x):
+        position_x -= 3
+
+    def draw(self, position_x, position_y):
+        self.screen.blit(self.image, (position_x, position_y))
 
 
 class Lives(Sprite):
@@ -53,11 +68,7 @@ class Lives(Sprite):
         self.image = pygame.image.load("heart.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.screen_rect = self.screen.get_rect()
-        self.position_x = 550
         self.position_y = 30
-
-    def update(self):
-        self.kill()
 
     def draw(self, position_x):
         self.screen.blit(self.image, (position_x, self.position_y))
@@ -174,9 +185,9 @@ class Ship:
         """Drawing ship on the screen."""
         current_time = game_time
         if self.moving_ship:
-            self.screen.blit(self.image, (60, 500))
+            self.screen.blit(self.image, (60, 400))
         else:
-            self.screen.blit(self.image, (60, 490))
+            self.screen.blit(self.image, (60, 390))
 
         if (current_time - self.time) > 300:
             if self.moving_ship:

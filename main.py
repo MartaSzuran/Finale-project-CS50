@@ -3,7 +3,9 @@ import pygame
 from pygame.sprite import Group
 
 import sprites
-from sprites import Missile, Explosion, draw_text, my_font, Ship, Letter, Lives
+from sprites import Missile, Explosion, \
+    draw_text, my_font, \
+    Ship, Letter, Lives, Waves
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -134,6 +136,14 @@ def increase_dif_with_time(start_time, numb_of_letters, current_game_time):
     return numb_of_letters, start_time
 
 
+def create_waves(screen, image):
+    wave_group = Group()
+    for i in range(3):
+        wave = Waves(screen, image)
+        wave_group.add(wave)
+    return wave_group
+
+
 # game
 def game():
     # creating ship object
@@ -144,11 +154,17 @@ def game():
     missile = Missile(screen, 1040, 450)
     missiles.add(missile)
 
-    # add lives to the screen
+    # create group of hearts objects
     hearts = Group()
     for i in range(3):
         heart = Lives(screen)
         hearts.add(heart)
+
+    # create two groups with waves objects
+    wave_image = pygame.image.load("wave.png")
+    waves = create_waves(screen, wave_image)
+
+    print(waves)
 
     # creating an explosion object
     explosion = Explosion(screen)
@@ -190,17 +206,32 @@ def game():
         # add score to the right top of the screen
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
         draw_text(str(score), my_font, (102, 102, 255), screen, 1120, 30)
-        timer = current_time*0.001
-        draw_text(str(round(timer, 1)), my_font, (102, 102, 255), screen, 20, 30)
 
         # draw lives
         # add creating hearts and add it to the sprite group
-        # than use remove
-        x_pos = 540
+        # than use remove when missile hit the ship
+        x_pos = 20
         for heart in hearts:
             x_pos_different = 50
             heart.draw(x_pos)
             x_pos += x_pos_different
+
+        # draw waves on the screen
+        difference_x = 200
+        difference_y = 100
+        wave_position_x = 1170
+        wave_position_y = 500
+        for wave in waves:
+            wave.draw(wave_position_x, wave_position_y)
+            wave.update(wave_position_x)
+            wave_position_x -= difference_x
+            wave_position_y += difference_y
+
+        for wave in waves:
+            if wave_position_x < 0:
+                waves.remove(wave)
+                wave = Waves(screen, wave_image)
+                waves.add(wave)
 
         # draw the ship on the game screen
         ship.draw(current_time)
@@ -219,7 +250,7 @@ def game():
                 letter.draw()
                 letter.update()
 
-            if missile.position_x == 160:
+            if missile.position_x == 164:
                 # count how many time missile get to the ship
                 missile_hit_the_ship += 1
 
