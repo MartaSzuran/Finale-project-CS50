@@ -43,20 +43,60 @@ def choose_the_letter(number):
     return key_letters
 
 
+class Island(Sprite):
+    """Create island class."""
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+        self.image = pygame.image.load("island.png")
+        self.rect = self.image.get_rect()
+        self.screen_rect = self.screen.get_rect()
+        self.position_x = 1150
+        self.position_y = 320
+
+    def update(self):
+        self.position_x -= 0.2
+        if self.position_x <= 0:
+            self.position_x = 1150
+
+    def draw(self):
+        self.screen.blit(self.image, (self.position_x, self.position_y))
+
+
 class Waves(Sprite):
     """Create waves class."""
-    def __init__(self, screen, image):
+    def __init__(self, screen, image, position_x, position_y):
         super().__init__()
         self.screen = screen
         self.image = image
         self.rect = self.image.get_rect()
         self.screen_rect = self.screen.get_rect()
+        self.position_x = position_x
+        self.position_y = position_y
 
-    def update(self, position_x):
-        position_x -= 3
+    def update(self):
+        self.position_x -= 2
 
-    def draw(self, position_x, position_y):
-        self.screen.blit(self.image, (position_x, position_y))
+    def draw(self):
+        self.screen.blit(self.image, (self.position_x, self.position_y))
+
+
+class Cloud(Sprite):
+    """Create class cloud."""
+    def __init__(self, screen, image, position_x, position_y):
+        super().__init__()
+        self.screen = screen
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.screen_rect = self.screen.get_rect()
+        self.position_x = position_x
+        self.position_y = position_y
+
+    def update(self):
+        self.position_x -= 1.5
+
+    def draw(self):
+        self.screen.blit(self.image, (self.position_x, self.position_y))
 
 
 class Lives(Sprite):

@@ -1,3 +1,4 @@
+import random
 import sys
 import pygame
 from pygame.sprite import Group
@@ -5,7 +6,7 @@ from pygame.sprite import Group
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
-    Ship, Letter, Lives, Waves
+    Ship, Letter, Lives, Waves, Cloud, Island
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -91,11 +92,11 @@ def create_letters(position_x, position_y, numb):
         if letter in ["w", "m"]:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
-            change_x += 30
-        elif letter in ["i", "j", "l", "t", "f"]:
+            change_x += 34
+        elif letter in ["i", "j", "l", "t", "f", "r"]:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
-            change_x += 13
+            change_x += 16
         else:
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
@@ -109,7 +110,6 @@ def create_collection_of_current_keys(collection_of_letters_objects):
     for letter in collection_of_letters_objects:
         key_letter = letter.letter
         keys.append(key_letter)
-
     return keys
 
 
@@ -128,20 +128,12 @@ def check_key(collection_of_letters_objects, counter, bool_key):
 
 
 def increase_dif_with_time(start_time, numb_of_letters, current_game_time):
-    difference = current_game_time-start_time
+    difference = current_game_time - start_time
     if difference > 10000:
         numb_of_letters += 1
         start_time = current_game_time
-        print("10 sec")
+        # print("10 sec")
     return numb_of_letters, start_time
-
-
-def create_waves(screen, image):
-    wave_group = Group()
-    for i in range(3):
-        wave = Waves(screen, image)
-        wave_group.add(wave)
-    return wave_group
 
 
 # game
@@ -160,11 +152,24 @@ def game():
         heart = Lives(screen)
         hearts.add(heart)
 
-    # create two groups with waves objects
+    # create waves objects and add it to the sprites group waves
     wave_image = pygame.image.load("wave.png")
-    waves = create_waves(screen, wave_image)
+    wave_1 = Waves(screen, wave_image, position_x=1150, position_y=530)
+    wave_2 = Waves(screen, wave_image, position_x=950, position_y=620)
+    wave_3 = Waves(screen, wave_image, position_x=750, position_y=710)
+    waves = Group(wave_1, wave_2, wave_3)
 
-    print(waves)
+    # create clouds objects and add it to the clouds group
+    cloud_image = pygame.image.load("cloud.png")
+    # big_cloud_image = pygame.image.load("cloud-computing.png")
+    cloud_1 = Cloud(screen, cloud_image, position_x=600, position_y=50)
+    cloud_2 = Cloud(screen, cloud_image, position_x=300, position_y=130)
+    cloud_3 = Cloud(screen, cloud_image, position_x=1020, position_y=210)
+    # cloud_4 = Cloud(screen, big_cloud_image, position_x=1060, position_y=80, big=True)
+    clouds = Group(cloud_1, cloud_2, cloud_3)
+
+    # create island
+    island = Island(screen)
 
     # creating an explosion object
     explosion = Explosion(screen)
@@ -193,15 +198,24 @@ def game():
 
     # control if player want to play
     running = True
+
     while running:
         # track current time
         current_time = pygame.time.get_ticks()
         # print(current_time)
 
-        numb_of_letters, start_time = increase_dif_with_time(start_time, numb_of_letters, current_time)
-
         # screen refreshment
-        screen.fill((102, 255, 255))
+        screen.fill((25, 51, 212))
+
+        # color the screen sky
+        sky = pygame.Rect((0, 0, 1200, 380))
+        pygame.draw.rect(screen, (102, 255, 255), sky)
+
+        island.draw()
+        island.update()
+
+        # function which return number of letters increase by time
+        numb_of_letters, start_time = increase_dif_with_time(start_time, numb_of_letters, current_time)
 
         # add score to the right top of the screen
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
@@ -210,28 +224,45 @@ def game():
         # draw lives
         # add creating hearts and add it to the sprite group
         # than use remove when missile hit the ship
-        x_pos = 20
+        heart_position_x = 20
         for heart in hearts:
             x_pos_different = 50
-            heart.draw(x_pos)
-            x_pos += x_pos_different
+            heart.draw(heart_position_x)
+            # draw hearts in 3 different x locations
+            heart_position_x += x_pos_different
 
         # draw waves on the screen
-        difference_x = 200
-        difference_y = 100
-        wave_position_x = 1170
-        wave_position_y = 500
         for wave in waves:
-            wave.draw(wave_position_x, wave_position_y)
-            wave.update(wave_position_x)
-            wave_position_x -= difference_x
-            wave_position_y += difference_y
+            wave.draw()
+            wave.update()
 
+        # if wave position_x is less or equal to zero remove that wave and create another with particular positions
+        # by choosing an element from the lists
+        # that wave add to the waves group
         for wave in waves:
-            if wave_position_x < 0:
+            if wave.position_x <= 0:
                 waves.remove(wave)
-                wave = Waves(screen, wave_image)
+                position_x_list = (1150, 950, 750)
+                position_x = random.choice(position_x_list)
+                position_y_list = (530, 620, 710)
+                position_y = random.choice(position_y_list)
+                wave = Waves(screen, wave_image, position_x, position_y)
                 waves.add(wave)
+
+        # draw clouds on the screen
+        for cloud in clouds:
+            cloud.draw()
+            cloud.update()
+
+        for cloud in clouds:
+            if cloud.position_x <= 10:
+                clouds.remove(cloud)
+                position_x_list = (1200, 1050, 1100)
+                position_x = random.choice(position_x_list)
+                position_y_list = (50, 150, 250)
+                position_y = random.choice(position_y_list)
+                cloud = Cloud(screen, cloud_image, position_x, position_y)
+                clouds.add(cloud)
 
         # draw the ship on the game screen
         ship.draw(current_time)
@@ -326,7 +357,7 @@ def game():
 
                         # I don't have to remove letters from word because I overwrite that list
                         word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
-                        print(numb_of_letters)
+                        # print(numb_of_letters)
 
         # check_key function change the color of letters object
         check_key(word, counter, right_key)
