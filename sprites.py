@@ -43,60 +43,48 @@ def choose_the_letter(number):
     return key_letters
 
 
-class Island(Sprite):
-    """Create island class."""
-    def __init__(self, screen):
+class Background(Sprite):
+    """Create base class background."""
+    def __init__(self, screen, image, position_x, position_y, speed):
+        # take all the components which need background objects
         super().__init__()
         self.screen = screen
-        self.image = pygame.image.load("island.png")
+        self.image = image
         self.rect = self.image.get_rect()
         self.screen_rect = self.screen.get_rect()
-        self.position_x = 1150
-        self.position_y = 320
+        self.position_x = position_x
+        self.position_y = position_y
+        self.speed = speed
 
     def update(self):
-        self.position_x -= 0.2
-        if self.position_x <= 0:
+        self.position_x -= self.speed
+        if self.position_x <= -30:
             self.position_x = 1150
 
     def draw(self):
         self.screen.blit(self.image, (self.position_x, self.position_y))
 
 
-class Waves(Sprite):
-    """Create waves class."""
-    def __init__(self, screen, image, position_x, position_y):
-        super().__init__()
-        self.screen = screen
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.screen_rect = self.screen.get_rect()
-        self.position_x = position_x
-        self.position_y = position_y
-
+class Clouds(Background):
+    """Change update in class Background."""
     def update(self):
-        self.position_x -= 2
+        super().update()
+        if self.position_x <= -100:
+            position_x_list = (1200, 1050, 1100)
+            self.position_x = random.choice(position_x_list)
+            position_y_list = (50, 150, 250)
+            self.position_y = random.choice(position_y_list)
 
-    def draw(self):
-        self.screen.blit(self.image, (self.position_x, self.position_y))
 
-
-class Cloud(Sprite):
-    """Create class cloud."""
-    def __init__(self, screen, image, position_x, position_y):
-        super().__init__()
-        self.screen = screen
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.screen_rect = self.screen.get_rect()
-        self.position_x = position_x
-        self.position_y = position_y
-
+class Waves(Background):
+    """Create waves class based on the Background claas."""
     def update(self):
-        self.position_x -= 1.5
-
-    def draw(self):
-        self.screen.blit(self.image, (self.position_x, self.position_y))
+        super().update()
+        if self.position_x <= -10:
+            position_x_list = (1150, 950, 750)
+            self.position_x = random.choice(position_x_list)
+            position_y_list = (530, 620, 710)
+            self.position_y = random.choice(position_y_list)
 
 
 class Lives(Sprite):

@@ -6,7 +6,7 @@ from pygame.sprite import Group
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
-    Ship, Letter, Lives, Waves, Cloud, Island
+    Ship, Letter, Lives, Waves, Background, Clouds
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -154,22 +154,25 @@ def game():
 
     # create waves objects and add it to the sprites group waves
     wave_image = pygame.image.load("wave.png")
-    wave_1 = Waves(screen, wave_image, position_x=1150, position_y=530)
-    wave_2 = Waves(screen, wave_image, position_x=950, position_y=620)
-    wave_3 = Waves(screen, wave_image, position_x=750, position_y=710)
+    wave_1 = Waves(screen, wave_image, position_x=1150, position_y=530, speed=2.4)
+    wave_2 = Waves(screen, wave_image, position_x=950, position_y=620, speed=2.4)
+    wave_3 = Waves(screen, wave_image, position_x=750, position_y=710, speed=2.4)
     waves = Group(wave_1, wave_2, wave_3)
 
     # create clouds objects and add it to the clouds group
     cloud_image = pygame.image.load("cloud.png")
-    # big_cloud_image = pygame.image.load("cloud-computing.png")
-    cloud_1 = Cloud(screen, cloud_image, position_x=600, position_y=50)
-    cloud_2 = Cloud(screen, cloud_image, position_x=300, position_y=130)
-    cloud_3 = Cloud(screen, cloud_image, position_x=1020, position_y=210)
-    # cloud_4 = Cloud(screen, big_cloud_image, position_x=1060, position_y=80, big=True)
+    cloud_1 = Clouds(screen, cloud_image, position_x=600, position_y=50, speed=1.4)
+    cloud_2 = Clouds(screen, cloud_image, position_x=300, position_y=130, speed=1.4)
+    cloud_3 = Clouds(screen, cloud_image, position_x=1020, position_y=210, speed=1.4)
     clouds = Group(cloud_1, cloud_2, cloud_3)
 
-    # create island
-    island = Island(screen)
+    # add island image and object
+    island_image = pygame.image.load("island.png")
+    island = Background(screen, island_image, position_x=1150, position_y=320, speed=0.3)
+
+    # add big cloud image and object
+    big_cloud_image = pygame.image.load("cloud-computing.png")
+    big_cloud = Background(screen, big_cloud_image, position_x=850, position_y=80, speed=0.8)
 
     # creating an explosion object
     explosion = Explosion(screen)
@@ -205,7 +208,7 @@ def game():
         # print(current_time)
 
         # screen refreshment
-        screen.fill((25, 51, 212))
+        screen.fill((0, 128, 255))
 
         # color the screen sky
         sky = pygame.Rect((0, 0, 1200, 380))
@@ -213,6 +216,10 @@ def game():
 
         island.draw()
         island.update()
+
+        # add big cloud
+        big_cloud.draw()
+        big_cloud.update()
 
         # function which return number of letters increase by time
         numb_of_letters, start_time = increase_dif_with_time(start_time, numb_of_letters, current_time)
@@ -236,33 +243,10 @@ def game():
             wave.draw()
             wave.update()
 
-        # if wave position_x is less or equal to zero remove that wave and create another with particular positions
-        # by choosing an element from the lists
-        # that wave add to the waves group
-        for wave in waves:
-            if wave.position_x <= 0:
-                waves.remove(wave)
-                position_x_list = (1150, 950, 750)
-                position_x = random.choice(position_x_list)
-                position_y_list = (530, 620, 710)
-                position_y = random.choice(position_y_list)
-                wave = Waves(screen, wave_image, position_x, position_y)
-                waves.add(wave)
-
         # draw clouds on the screen
         for cloud in clouds:
             cloud.draw()
             cloud.update()
-
-        for cloud in clouds:
-            if cloud.position_x <= 10:
-                clouds.remove(cloud)
-                position_x_list = (1200, 1050, 1100)
-                position_x = random.choice(position_x_list)
-                position_y_list = (50, 150, 250)
-                position_y = random.choice(position_y_list)
-                cloud = Cloud(screen, cloud_image, position_x, position_y)
-                clouds.add(cloud)
 
         # draw the ship on the game screen
         ship.draw(current_time)
