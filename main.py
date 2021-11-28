@@ -6,7 +6,7 @@ from pygame.sprite import Group
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
-    Ship, Letter, Lives, Waves, Background, Clouds
+    Ship, Letter, Lives, Waves, Background, Clouds, Watch
 
 # get to know more about the clocks
 mainClock = pygame.time.Clock()
@@ -43,7 +43,7 @@ def main_menu():
                 game()
         if button_2.collidepoint(mouse_x, mouse_y):
             if click:
-                rating()
+                ranking()
         if button_3.collidepoint(mouse_x, mouse_y):
             if click:
                 sys.exit()
@@ -55,7 +55,7 @@ def main_menu():
 
         # draw text on the buttons
         draw_text("Play", my_font, (0, 102, 204), screen, 580, 208)
-        draw_text("Rating", my_font, (0, 102, 204), screen, 567, 308)
+        draw_text("Ranking", my_font, (0, 102, 204), screen, 560, 308)
         draw_text("Exit", my_font, (0, 102, 204), screen, 580, 408)
 
         # set click to False
@@ -138,6 +138,8 @@ def increase_dif_with_time(start_time, numb_of_letters, current_game_time):
 
 # game
 def game():
+    # initialize time
+    time = Watch()
     # creating ship object
     ship = Ship(screen)
 
@@ -203,6 +205,11 @@ def game():
     running = True
 
     while running:
+        print(time)
+        time_changes = time.measure()
+        print(time_changes)
+        reset_time = time.reset(time_changes)
+        print(reset_time)
         # track current time
         current_time = pygame.time.get_ticks()
         # print(current_time)
@@ -355,7 +362,7 @@ def game():
 
 
 # show rating screen
-def rating():
+def ranking():
     running = True
 
     while running:
@@ -363,7 +370,7 @@ def rating():
         screen.fill((102, 255, 255))
 
         # add name to the option screen
-        draw_text("Rating", my_font, (102, 102, 255), screen, 535, 70)
+        draw_text("Ranking", my_font, (102, 102, 255), screen, 535, 70)
 
         # waiting for press button or mouse button
         for event in pygame.event.get():

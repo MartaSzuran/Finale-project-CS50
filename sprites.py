@@ -1,8 +1,11 @@
+import time
+
 import pygame
 from pygame.sprite import Sprite
 import string
 import random
 import pygame.font
+import math
 
 pygame.init()
 
@@ -228,3 +231,24 @@ class Ship:
     def create(self, game_time):
         self.time = game_time
         self.moving_ship = True
+
+
+class Watch:
+    """Class for measure the time."""
+    def __init__(self):
+        self.time = round(time.time(), 2)
+
+    def __str__(self):
+        return "Time: " + str(self.time)
+
+    def measure(self):
+        first_time = self.time
+        second_time = time.time()
+        delta_time = second_time - first_time
+        return delta_time
+
+    def reset(self, delta_time):
+        if delta_time >= 5:
+            self.time = time.time()
+
+
