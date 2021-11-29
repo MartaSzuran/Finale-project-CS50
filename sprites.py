@@ -239,7 +239,7 @@ class Watch:
         self.time = round(time.time(), 2)
 
     def __str__(self):
-        return "Time: " + str(self.time)
+        return str(self.time)
 
     def measure(self):
         first_time = self.time
@@ -247,8 +247,7 @@ class Watch:
         delta_time = second_time - first_time
         return delta_time
 
-    def reset(self, delta_time):
-        if delta_time >= 5:
-            self.time = time.time()
+    def reset(self):
+        self.time = round(time.time(), 2)
 
 

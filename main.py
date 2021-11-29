@@ -127,19 +127,19 @@ def check_key(collection_of_letters_objects, counter, bool_key):
     return bool_key
 
 
-def increase_dif_with_time(start_time, numb_of_letters, current_game_time):
-    difference = current_game_time - start_time
-    if difference > 10000:
+def increase_dif_with_time(numb_of_letters, timer, time_delta):
+    """Increasing difficulty with time."""
+    if time_delta > 12:
         numb_of_letters += 1
-        start_time = current_game_time
-        # print("10 sec")
-    return numb_of_letters, start_time
+        timer.reset()
+    return numb_of_letters, timer
 
 
 # game
 def game():
     # initialize time
-    time = Watch()
+    timer = Watch()
+
     # creating ship object
     ship = Ship(screen)
 
@@ -188,8 +188,6 @@ def game():
 
     # starting point for number of letters
     numb_of_letters = 1
-    # starting point for counting time
-    start_time = 0
 
     # create letter above the missile
     word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
@@ -205,11 +203,8 @@ def game():
     running = True
 
     while running:
-        print(time)
-        time_changes = time.measure()
-        print(time_changes)
-        reset_time = time.reset(time_changes)
-        print(reset_time)
+        time_delta = timer.measure()
+        # print(time_delta)
         # track current time
         current_time = pygame.time.get_ticks()
         # print(current_time)
@@ -229,7 +224,7 @@ def game():
         big_cloud.update()
 
         # function which return number of letters increase by time
-        numb_of_letters, start_time = increase_dif_with_time(start_time, numb_of_letters, current_time)
+        numb_of_letters, timer = increase_dif_with_time(numb_of_letters, timer, time_delta)
 
         # add score to the right top of the screen
         draw_text("Score: ", my_font, (102, 102, 255), screen, 1030, 30)
