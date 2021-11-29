@@ -5,7 +5,6 @@ from pygame.sprite import Sprite
 import string
 import random
 import pygame.font
-import math
 
 pygame.init()
 
@@ -250,4 +249,5 @@ class Watch:
     def reset(self):
         self.time = round(time.time(), 2)
 
-
+    def countdown(self, time_to_wait):
+        time.sleep(time_to_wait)

@@ -1,4 +1,3 @@
-import random
 import sys
 import pygame
 from pygame.sprite import Group
@@ -8,7 +7,6 @@ from sprites import Missile, Explosion, \
     draw_text, my_font, \
     Ship, Letter, Lives, Waves, Background, Clouds, Watch
 
-# get to know more about the clocks
 mainClock = pygame.time.Clock()
 pygame.init()
 
@@ -129,7 +127,7 @@ def check_key(collection_of_letters_objects, counter, bool_key):
 
 def increase_dif_with_time(numb_of_letters, timer, time_delta):
     """Increasing difficulty with time."""
-    if time_delta > 12:
+    if time_delta > 17:
         numb_of_letters += 1
         timer.reset()
     return numb_of_letters, timer
@@ -278,6 +276,9 @@ def game():
                 elif missile_hit_the_ship == 2:
                     hearts.remove(heart)
                 else:
+                    draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 420, 200)
+                    pygame.display.flip()
+                    timer.countdown(2)
                     running = False
                 score -= 20
                 # print(score)
