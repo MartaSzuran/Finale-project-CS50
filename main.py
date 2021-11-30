@@ -2,6 +2,7 @@ import sys
 import pygame
 from pygame.sprite import Group
 
+import ranking_database
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
@@ -16,65 +17,6 @@ pygame.display.set_caption("Shoot the words")
 
 # adding variable click to control players clicking
 click = False
-
-
-def main_menu():
-    while True:
-        # screen refreshment
-        screen.fill((102, 255, 255))
-
-        # font_obj_name.render_to( where = screen, position(x=550, y=40), text to render= "Main menu", color = red)
-        draw_text("Main Menu", my_font, (102, 102, 255), screen, 535, 70)
-
-        # mouse position
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        # buttons rectangular objets = button_2 = pygame.Rect(50, 100, 200, 50)
-        # to write a text on those buttons need to make it as a surface
-        button_1 = pygame.Rect(505, 200, 200, 50)
-        button_2 = pygame.Rect(505, 300, 200, 50)
-        button_3 = pygame.Rect(505, 400, 200, 50)
-
-        # if mouse is on the buttons do smth
-        if button_1.collidepoint(mouse_x, mouse_y):
-            if click:
-                game()
-        if button_2.collidepoint(mouse_x, mouse_y):
-            if click:
-                ranking()
-        if button_3.collidepoint(mouse_x, mouse_y):
-            if click:
-                sys.exit()
-
-        # draw buttons on the screen
-        pygame.draw.rect(screen, (192, 192, 192), button_1)
-        pygame.draw.rect(screen, (192, 192, 192), button_2)
-        pygame.draw.rect(screen, (192, 192, 192), button_3)
-
-        # draw text on the buttons
-        draw_text("Play", my_font, (0, 102, 204), screen, 580, 208)
-        draw_text("Ranking", my_font, (0, 102, 204), screen, 560, 308)
-        draw_text("Exit", my_font, (0, 102, 204), screen, 580, 408)
-
-        # set click to False
-        click = False
-
-        # waiting for press button or mouse button
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.K_DOWN:
-                if event.key == pygame.K_ESCAPE:
-                    sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    click = True
-
-        # display last changed screen
-        pygame.display.update()
-
-        # clock
-        mainClock.tick(60)
 
 
 def create_letters(position_x, position_y, numb):
@@ -278,7 +220,7 @@ def game():
                 else:
                     draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 420, 200)
                     pygame.display.flip()
-                    timer.countdown(2)
+                    timer.countdown(1)
                     running = False
                 score -= 20
                 # print(score)
@@ -356,6 +298,8 @@ def game():
         # clock
         mainClock.tick(60)
 
+    return score
+
 
 # show rating screen
 def ranking():
@@ -378,6 +322,119 @@ def ranking():
                 if event.key == pygame.K_ESCAPE:
                     # escape to main menu
                     running = False
+
+        # display last changed screen
+        pygame.display.update()
+
+        # clock
+        mainClock.tick(60)
+
+
+def game_over(score):
+    """Create screen game over and if players score is in first 10 scores in ranking ask for his/her name."""
+    # create an empty string for players name
+    player_name = ""
+
+    running = True
+
+    while running:
+        # screen refreshment
+        screen.fill((102, 255, 255))
+
+        # add name to the option screen
+        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 380, 100)
+        draw_text("Your score is: ", pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 250, 220)
+        draw_text(str(score), pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 550, 220)
+        draw_text("Write your name and press enter: ", pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 120, 320)
+        draw_text("To exit press esc. ", pygame.font.SysFont("Verdana", 20), (0, 0, 0), screen, 950, 750)
+
+        # waiting for press button or mouse button
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    # escape to main menu
+                    running = False
+
+                #elif event.key == pygame.K_BACKSPACE:
+                    #if len(player_name) > -1:
+                        #print(len(player_name))
+                        #player_name.pop(len(player_name))
+
+                elif event.key == pygame.K_RETURN:
+                    # it does not work, check why
+                    con, cur = ranking_database.open_database("ranking.db")
+                    ranking_database.write_into_database(con, cur, player_name, score)
+                    ranking_database.print_database(cur)
+                    ranking_database.close_database(con)
+                else:
+                    player_name += event.unicode
+
+        draw_text(player_name, pygame.font.SysFont("Verdana", 50), (0, 0, 0), screen, 420, 450)
+
+        # display last changed screen
+        pygame.display.update()
+
+        # clock
+        mainClock.tick(60)
+
+
+def main_menu():
+
+    while True:
+        # screen refreshment
+        screen.fill((102, 255, 255))
+
+        # font_obj_name.render_to( where = screen, position(x=550, y=40), text to render= "Main menu", color = red)
+        draw_text("Main Menu", my_font, (102, 102, 255), screen, 535, 70)
+
+        # mouse position
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        # buttons rectangular objets = button_2 = pygame.Rect(50, 100, 200, 50)
+        # to write a text on those buttons need to make it as a surface
+        button_1 = pygame.Rect(505, 200, 200, 50)
+        button_2 = pygame.Rect(505, 300, 200, 50)
+        button_3 = pygame.Rect(505, 400, 200, 50)
+
+        # if mouse is on the buttons do smth
+        if button_1.collidepoint(mouse_x, mouse_y):
+            if click:
+                score = game()
+                game_over(score)
+        if button_2.collidepoint(mouse_x, mouse_y):
+            if click:
+                ranking()
+        if button_3.collidepoint(mouse_x, mouse_y):
+            if click:
+                sys.exit()
+
+        # draw buttons on the screen
+        pygame.draw.rect(screen, (192, 192, 192), button_1)
+        pygame.draw.rect(screen, (192, 192, 192), button_2)
+        pygame.draw.rect(screen, (192, 192, 192), button_3)
+
+        # draw text on the buttons
+        draw_text("Play", my_font, (0, 102, 204), screen, 580, 208)
+        draw_text("Ranking", my_font, (0, 102, 204), screen, 560, 308)
+        draw_text("Exit", my_font, (0, 102, 204), screen, 580, 408)
+
+        # set click to False
+        click = False
+
+        # waiting for press button or mouse button
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.K_DOWN:
+                if event.key == pygame.K_ESCAPE:
+                    sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 
         # display last changed screen
         pygame.display.update()
