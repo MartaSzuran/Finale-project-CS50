@@ -214,6 +214,7 @@ def game():
                 # print(missile_hit_the_ship)
                 # if missile get to the ship remove one heart from the screen
                 if missile_hit_the_ship == 1:
+                    # running = False
                     hearts.remove(heart)
                 elif missile_hit_the_ship == 2:
                     hearts.remove(heart)
@@ -335,6 +336,9 @@ def game_over(score):
     # create an empty string for players name
     player_name = ""
 
+    # color to create frame for user input
+    color = pygame.Color("azure3")
+
     running = True
 
     while running:
@@ -342,11 +346,12 @@ def game_over(score):
         screen.fill((102, 255, 255))
 
         # add name to the option screen
-        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 380, 100)
-        draw_text("Your score is: ", pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 250, 220)
-        draw_text(str(score), pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 550, 220)
-        draw_text("Write your name and press enter: ", pygame.font.SysFont("Verdana", 40), (0, 0, 0), screen, 120, 320)
-        draw_text("To exit press esc. ", pygame.font.SysFont("Verdana", 20), (0, 0, 0), screen, 950, 750)
+        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (0, 0, 0), screen, 320, 100)
+        draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 400, 220)
+        draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 700, 220)
+        draw_text("Write your name and press enter: ",
+                  pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 310, 320)
+        draw_text("To exit press esc. ", pygame.font.SysFont("Times New Roman", 20), (0, 0, 0), screen, 950, 750)
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
@@ -359,21 +364,26 @@ def game_over(score):
                     # escape to main menu
                     running = False
 
-                #elif event.key == pygame.K_BACKSPACE:
-                    #if len(player_name) > -1:
-                        #print(len(player_name))
-                        #player_name.pop(len(player_name))
+                elif event.key == pygame.K_BACKSPACE:
+                    player_name = player_name[:-1]
 
                 elif event.key == pygame.K_RETURN:
+                    pass
                     # it does not work, check why
-                    con, cur = ranking_database.open_database("ranking.db")
-                    ranking_database.write_into_database(con, cur, player_name, score)
-                    ranking_database.print_database(cur)
-                    ranking_database.close_database(con)
+                    # con, cur = ranking_database.open_database("ranking.db")
+                    #ranking_database.write_into_database(con, cur, player_name, score)
+                    #ranking_database.print_database(cur)
+                    #ranking_database.close_database(con)
                 else:
                     player_name += event.unicode
+                    if len(player_name) > 8:
+                        player_name = player_name[:-1]
 
-        draw_text(player_name, pygame.font.SysFont("Verdana", 50), (0, 0, 0), screen, 420, 450)
+        frame = pygame.Rect(450, 400, 250, 60)
+        pygame.draw.rect(screen, color, frame, 2)
+        draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (0, 0, 0), screen, 480, 400)
+        draw_text("No more than 8 letters...",
+                  pygame.font.SysFont("Times New Roman", 20), (0, 0, 0), screen, 475, 460)
 
         # display last changed screen
         pygame.display.update()
