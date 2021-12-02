@@ -55,6 +55,12 @@ def print_table(cursor):
     print(cursor.fetchall())
 
 
+def format_data(connection):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM ranking")
+    data = (cursor.fetchall())
+    return data
+
 # con = create_connection("ranking.db")
 # cur = create_table(con)
 # name = "Marta"

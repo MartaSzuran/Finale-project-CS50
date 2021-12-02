@@ -1,12 +1,14 @@
 import sys
 import pygame
-from pygame.sprite import Group
-
 import database_sql
+
+from pygame.sprite import Group
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
-    Ship, Letter, Lives, Waves, Background, Clouds, Watch
+    Ship, Letter, Lives, \
+    Waves, Background, Clouds, \
+    Watch
 
 mainClock = pygame.time.Clock()
 pygame.init()
@@ -230,7 +232,7 @@ def game():
 
                 # explosion.create function takes current positions and current time of missile remove event
                 # to create longer blow effect
-                explosion.create(position_x=missile.position_x+30,
+                explosion.create(position_x=missile.position_x + 30,
                                  position_y=missile.position_y,
                                  time=current_time)
                 # after removing create another missile and add it to the missile group
@@ -278,7 +280,7 @@ def game():
 
                         # explosion.create function takes current positions and current time of missile remove event
                         # to create longer blow effect
-                        explosion.create(position_x=missile.position_x+30,
+                        explosion.create(position_x=missile.position_x + 30,
                                          position_y=missile.position_y,
                                          time=current_time)
                         # after removing create another missile and add it to the missile group
@@ -306,12 +308,41 @@ def game():
 def ranking():
     running = True
 
+    con = database_sql.create_connection("ranking.db")
+    data = database_sql.format_data(con)
+    database_sql.close_connection(con)
+
     while running:
         # screen refreshment
         screen.fill((102, 255, 255))
 
         # add name to the option screen
-        draw_text("Ranking", my_font, (102, 102, 255), screen, 535, 70)
+        draw_text("Ranking", pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 535, 70)
+
+        # setting star positions for table numbers
+        y_position = 150
+        x_position = 300
+        # change position x and y
+        change_y = 60
+        change_x = 300
+        for i in range(10):
+            draw_text(str(i + 1), pygame.font.SysFont("Times New Roman", 30),
+                      (102, 102, 255), screen, x_position, y_position)
+            y_position += change_y
+
+        # set position to the start ones
+        y_position = 150
+        x_position = 500
+
+        # print data from database file
+        for row in data:
+            draw_text(str(row[0]), pygame.font.SysFont("Times New Roman", 30),
+                      (102, 102, 255), screen, x_position, y_position)
+            x_position += change_x
+            draw_text(str(row[1]), pygame.font.SysFont("Times New Roman", 30),
+                      (102, 102, 255), screen, x_position, y_position)
+            y_position += change_y
+            x_position -= change_x
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
@@ -395,7 +426,6 @@ def game_over(score):
 
 
 def main_menu():
-
     while True:
         # screen refreshment
         screen.fill((102, 255, 255))
@@ -417,6 +447,7 @@ def main_menu():
             if click:
                 score = game()
                 game_over(score)
+                ranking()
         if button_2.collidepoint(mouse_x, mouse_y):
             if click:
                 ranking()
