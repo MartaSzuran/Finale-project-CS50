@@ -2,7 +2,7 @@ import sys
 import pygame
 from pygame.sprite import Group
 
-import ranking_database
+import database_sql
 import sprites
 from sprites import Missile, Explosion, \
     draw_text, my_font, \
@@ -214,7 +214,7 @@ def game():
                 # print(missile_hit_the_ship)
                 # if missile get to the ship remove one heart from the screen
                 if missile_hit_the_ship == 1:
-                    # running = False
+                    running = False
                     hearts.remove(heart)
                 elif missile_hit_the_ship == 2:
                     hearts.remove(heart)
@@ -368,12 +368,14 @@ def game_over(score):
                     player_name = player_name[:-1]
 
                 elif event.key == pygame.K_RETURN:
-                    pass
-                    # it does not work, check why
-                    # con, cur = ranking_database.open_database("ranking.db")
-                    #ranking_database.write_into_database(con, cur, player_name, score)
-                    #ranking_database.print_database(cur)
-                    #ranking_database.close_database(con)
+                    # insert name and score into database file
+                    con = database_sql.create_connection("ranking.db")
+                    cur = database_sql.create_table(con)
+                    database_sql.insert_data_into_db(con, cur, player_name, score)
+                    database_sql.print_table(cur)
+                    database_sql.close_connection(con)
+                    running = False
+
                 else:
                     player_name += event.unicode
                     if len(player_name) > 8:
