@@ -216,7 +216,6 @@ def game():
                 # print(missile_hit_the_ship)
                 # if missile get to the ship remove one heart from the screen
                 if missile_hit_the_ship == 1:
-                    running = False
                     hearts.remove(heart)
                 elif missile_hit_the_ship == 2:
                     hearts.remove(heart)
@@ -344,6 +343,9 @@ def ranking():
             y_position += change_y
             x_position -= change_x
 
+        draw_text("To exit press esc or space. ",
+                  pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 900, 750)
+
         # waiting for press button or mouse button
         for event in pygame.event.get():
 
@@ -351,7 +353,7 @@ def ranking():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_SPACE:
                     # escape to main menu
                     running = False
 
@@ -369,6 +371,16 @@ def game_over(score):
 
     # color to create frame for user input
     color = pygame.Color("azure3")
+    score_on_the_list = False
+
+    con = database_sql.create_connection("ranking.db")
+    list_data = database_sql.format_data(con)
+    if len(list_data) < 10:
+        score_10 = -61
+    else:
+        score_10 = database_sql.search_for_value(con)
+    print(score_10)
+    database_sql.close_connection(con)
 
     running = True
 
@@ -377,12 +389,23 @@ def game_over(score):
         screen.fill((102, 255, 255))
 
         # add name to the option screen
-        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (0, 0, 0), screen, 320, 100)
-        draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 400, 220)
-        draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 700, 220)
-        draw_text("Write your name and press enter: ",
-                  pygame.font.SysFont("Times New Roman", 40), (0, 0, 0), screen, 310, 320)
-        draw_text("To exit press esc. ", pygame.font.SysFont("Times New Roman", 20), (0, 0, 0), screen, 950, 750)
+        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (102, 102, 255), screen, 320, 100)
+        draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 400, 220)
+        draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 700, 220)
+
+        if score > score_10:
+            draw_text("Well done you are on the top 10 list! ",
+                      pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 300, 320)
+            draw_text("Write your name and press enter: ",
+                      pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 310, 420)
+            frame = pygame.Rect(450, 500, 250, 60)
+            pygame.draw.rect(screen, color, frame, 2)
+            draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (102, 102, 255), screen, 480, 500)
+            draw_text("No more than 8 letters...",
+                      pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 475, 460)
+            score_on_the_list = True
+
+        draw_text("To exit press esc. ", pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 950, 750)
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
@@ -398,25 +421,23 @@ def game_over(score):
                 elif event.key == pygame.K_BACKSPACE:
                     player_name = player_name[:-1]
 
+                # K_RETURN == basic enter
                 elif event.key == pygame.K_RETURN:
-                    # insert name and score into database file
-                    con = database_sql.create_connection("ranking.db")
-                    cur = database_sql.create_table(con)
-                    database_sql.insert_data_into_db(con, cur, player_name, score)
-                    database_sql.print_table(cur)
-                    database_sql.close_connection(con)
-                    running = False
+                    if score_on_the_list:
+                        # insert name and score into database file
+                        con = database_sql.create_connection("ranking.db")
+                        cur = database_sql.create_table(con)
+                        database_sql.insert_data_into_db(con, cur, player_name, score)
+                        database_sql.print_table(cur)
+                        database_sql.close_connection(con)
+                        running = False
+                    else:
+                        running = False
 
                 else:
                     player_name += event.unicode
                     if len(player_name) > 8:
                         player_name = player_name[:-1]
-
-        frame = pygame.Rect(450, 400, 250, 60)
-        pygame.draw.rect(screen, color, frame, 2)
-        draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (0, 0, 0), screen, 480, 400)
-        draw_text("No more than 8 letters...",
-                  pygame.font.SysFont("Times New Roman", 20), (0, 0, 0), screen, 475, 460)
 
         # display last changed screen
         pygame.display.update()

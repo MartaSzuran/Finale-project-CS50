@@ -57,14 +57,23 @@ def print_table(cursor):
 
 def format_data(connection):
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM ranking")
+    cursor.execute("SELECT * FROM ranking ORDER BY score DESC LIMIT 10")
     data = (cursor.fetchall())
     return data
 
+
+def search_for_value(connection):
+    data = format_data(connection)
+    # print(data[-1][1])
+    last_score = data[-1][1]
+    return last_score
+
+
 # con = create_connection("ranking.db")
-# cur = create_table(con)
+# cur = con.cursor()
+# search_for_value(con)
+# cur.execute("DROP TABLE ranking")
 # name = "Marta"
 # score = 60
 # insert_data_into_db(con, cur, name, score)
-# print_table(cur)
 # close_connection(con)
