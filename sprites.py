@@ -1,5 +1,4 @@
 import time
-
 import pygame
 from pygame.sprite import Sprite
 import string

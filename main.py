@@ -1,3 +1,5 @@
+# # Game "Shoot the letters!"
+
 import sys
 import pygame
 import database_sql
@@ -71,7 +73,7 @@ def check_key(collection_of_letters_objects, counter, bool_key):
 
 def increase_dif_with_time(numb_of_letters, timer, time_delta):
     """Increasing difficulty with time."""
-    if time_delta > 17:
+    if time_delta > 25:
         numb_of_letters += 1
         timer.reset()
     return numb_of_letters, timer
@@ -126,6 +128,7 @@ def game():
 
     # bool to check if the key is the same as pressed letter by the user
     right_key = False
+    # counter to manage with color changing (used in check_key function)
     counter = 0
 
     # starting point for number of letters
@@ -217,14 +220,18 @@ def game():
                 # if missile get to the ship remove one heart from the screen
                 if missile_hit_the_ship == 1:
                     hearts.remove(heart)
+                    # counter for changing color of letters objects
+                    counter = 0
+
                 elif missile_hit_the_ship == 2:
                     hearts.remove(heart)
+                    # counter for changing color of letters objects
+                    counter = 0
                 else:
                     draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 420, 200)
                     pygame.display.flip()
                     timer.countdown(1)
                     running = False
-                score -= 20
                 # print(score)
                 # missile come close to the ship missile remove
                 missiles.remove(missile)
@@ -238,7 +245,7 @@ def game():
                 missile = Missile(screen, 1040, 450)
                 missiles.add(missile)
 
-                # I don't have to remove letters from word because I overwrite thar list
+                # I don't have to remove letters from word because I overwrite that list
                 word = create_letters(missile.position_x, missile.position_y, numb_of_letters)
                 # print(numb_of_letters)
 
@@ -447,6 +454,7 @@ def game_over(score):
 
 
 def main_menu():
+    """Create main menu - buttons game, ranking and exit."""
     while True:
         # screen refreshment
         screen.fill((102, 255, 255))
