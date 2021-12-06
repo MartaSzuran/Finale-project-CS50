@@ -2,10 +2,10 @@
 ## Video Demo: HERE&gt;
 ## Game: **"Shoot the letters!"**
 
-##TITLE
+## TITLE
 Game created to improve keyboard typing.
 
-##PLOT
+## PLOT
 Ship swims through the seas and to get save to its destination player need to help it
 and shoot the torpedoes.
 
@@ -17,7 +17,7 @@ The goal is to write letters without mistakes and get to the top 10 of the highe
 
 Good luck and have fun :)
 
-##DESCRIPTION
+## DESCRIPTION
 Learning how to write on the keyboard properly and fast is really important nowadays.
 I have created this game to encourage people (especially children), to grab the challenge and try to learn how to write,
 later even rivalry with their friends in top 10 ranking. Creating game **"Shoot the letters!"** give me a lot of joy.
@@ -26,7 +26,7 @@ This game is pushing player to become perfectionist in case to get the highest s
 and to become competitive with other players! At the beginning above the torpedo is one letter,
 but with time their amount increase.
 
-##MAIN TOPICS:
+## MAIN TOPICS:
 - **Python**
     OOP
     modules: 
@@ -58,7 +58,7 @@ but with time their amount increase.
     super()
     update()
 
-##CHALLENGES
+## CHALLENGES
 Working with that project was difficult for me because in many cases I need to learn new things,
 especially within pygame. How to add move to sprites, how display screen works or timer.
 The most difficult was adding logic to letters and changing their colour.
@@ -69,10 +69,10 @@ In future, I plan:
 - make entire project as OOP.
 - create website with overall ranking
 
-##INSTALLATION
+## INSTALLATION
 To play my game you need to download python, my code from github, and enjoy playing !
 
-##HELPS
+## HELPS
 I use some help from:
 - entire CS50 course
 - python documentation
@@ -82,7 +82,7 @@ I use some help from:
 - https://www.youtube.com/watch?v=a5JWrd7Y_14
 - stack overflow
 
-######Detailed project architecture description:
+###### Detailed project architecture description:
 
 Project contains three files:
 
