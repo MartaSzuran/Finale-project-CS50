@@ -11,7 +11,7 @@ and shoot the torpedos.
 
 To destroy them before they get to the ship player need to write propiate letters,
 printed above the torpedos. For each destroyed torpedo player gets 10 points, 
-but he/she need to be carefull because pressing wrong once makes your score smaller with 5 points!
+but he/she need to be carefull because pressing wrong buttons makes your score smaller with 5 points!
 
 The goal is to write letters without mistakes and get to the top 10 of the highest scores! 
 
@@ -42,9 +42,10 @@ Create main menu with buttons:
 * game():
 	starts drawing screens and sprites, contain all game logic (score, creating torpedos (missiles), 
 	loosing hearts when torpedos reach the ship) with some helpfull function 
-	(create_letters() - create letter abouve the torpedos; create_collection_of_current_keys() 
-	and check_key() - to grab pressed buttons from events and check if player pressed 
-	propiate once; increase_dif_with_time() - add another letter above the torpedo.
+	(create_letters() - create letter abouve the torpedos; 
+	create_collection_of_current_keys() and check_key() - to grab pressed buttons from events 
+	and check if player pressed propiate once then change color of letters to green; 
+	increase_dif_with_time() - add another letter above the torpedo.
 	
 --> after loosing all three hearts function game_over() launch:
 	show game over screen, 
@@ -65,18 +66,4 @@ contain:
 Work with sqlite3 module, contain many functions created to work with database like:
 insert_data_into_db(), print_table(), format_data()
 
-
-
-
-
-	
-
-
-
-
-
-
-
-
- 
 
