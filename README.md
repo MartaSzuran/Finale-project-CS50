@@ -2,49 +2,41 @@
 ## Video Demo: HERE&gt;
 ## Game: **"Shoot the letters!"**
 
-## TITLE
-Game created to improve keyboard typing.
-
 ## PLOT
-Ship swims through the seas and to get save to its destination player need to help it
-and shoot the torpedoes.
+Ship sails through the seas and in order to reach destination player has to protect it from the torpedoes using touch typing skills (typing without looking at the keyboard).
 
-To destroy them before they get to the ship player need to write appropiate letters,
-printed above the torpedoes. For each destroyed torpedo player gets 10 points,
-but he/she need to be careful because pressing wrong buttons makes your score smaller with 5 points!
+## DESCRIPTION
+I have created this game to help people improve their touch typing skills.
 
-The goal is to write letters without mistakes and get to the top 10 of the highest scores!
+This game is pushing the player to get the highest score he could, and to become competitive with other players!
+
+The goal of the game is to type the letters printed above the torpedo, before it reach the ship.
+
+For each destroyed torpedo player gets 10 points, but he needs to be careful because pressing wrong buttons makes his score smaller by 5 points!
+
+Creating game **"Shoot the letters!"** gave me a lot of joy.
 
 Good luck and have fun :)
 
-## DESCRIPTION
-Learning how to write on the keyboard properly and fast is really important nowadays.
-I have created this game to encourage people (especially children), to grab the challenge and try to learn how to write,
-later even rivalry with their friends in top 10 ranking. Creating game **"Shoot the letters!"** give me a lot of joy.
-
-This game is pushing player to become perfectionist in case to get the highest score he could,
-and to become competitive with other players! At the beginning above the torpedo is one letter,
-but with time their amount increase.
-
-## MAIN TOPICS:
+## TECHNOLOGY STACK:
 - **Python**
-    OOP
-    modules: 
-	string
-	random
-	time
-	pygame
-- **SQL**
-    sqlite3 module
-    create connection, cursor, close connection
-    create database
-    create table
-    insert into
-    delete
-    searching through resultes with where
-    sort results	
-	
-- **Git & Git workflow**
+    Features: classes, strings, random, time
+    Libraries:
+        pygame:
+            user input
+            output graphics
+            sprite
+
+        sqllite3:
+            create connection, cursor, close connection
+            create database
+            create table
+            insert into
+            delete
+            searching through resultes with where
+            sort results
+      
+- **Git**
     git clone
     git add
     git commit
@@ -53,34 +45,22 @@ but with time their amount increase.
 - **GitHub**
     create a repository
 
-- **Pygame**
-    pygame sprite class
-    super()
-    update()
+##CHALLENGES
+- managing complex project
+- using external python libraraies
+- searching through official documentations
+- effectively searching for information on the internet
+- managing drawing multiple items on the screen and their movement
+- managing multiple objects interactions
 
-## CHALLENGES
-Working with that project was difficult for me because in many cases I need to learn new things,
-especially within pygame. How to add move to sprites, how display screen works or timer.
-The most difficult was adding logic to letters and changing their colour.
-Working with events was also some new features that I needed to understand. Finally, I am really happy
-and proud of myself that I am up to create such game. 
-
-In future, I plan:
-- make entire project as OOP.
-- create website with overall ranking
-
-## INSTALLATION
-To play my game you need to download python, my code from github, and enjoy playing !
-
-## HELPS
+## REFERENCES
 I use some help from:
-- entire CS50 course
+- CS50 course materials
 - python documentation
-- https://www.freecodecamp.org/news/how-to-write-a-good-readme-file/
-- https://www.youtube.com/watch?v=byHcYRpMgI4
-- https://www.youtube.com/watch?v=FfWpgLFMI7w
-- https://www.youtube.com/watch?v=a5JWrd7Y_14
-- stack overflow
+- opis1 https://www.youtube.com/watch?v=byHcYRpMgI4
+- opis2 https://www.youtube.com/watch?v=FfWpgLFMI7w
+- opis3 https://www.youtube.com/watch?v=a5JWrd7Y_14
+- sprites: wwww.flaticon.com
 
 ###### Detailed project architecture description:
 

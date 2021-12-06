@@ -17,7 +17,7 @@ pygame.init()
 
 # create screen
 screen = pygame.display.set_mode((1200, 800), 0, 32)
-pygame.display.set_caption("Shoot the words")
+pygame.display.set_caption("Shoot the letters")
 
 # adding variable click to control players clicking
 click = False
@@ -99,25 +99,25 @@ def game():
         hearts.add(heart)
 
     # create waves objects and add it to the sprites group waves
-    wave_image = pygame.image.load("wave.png")
+    wave_image = pygame.image.load("sprites/wave.png")
     wave_1 = Waves(screen, wave_image, position_x=1150, position_y=530, speed=2.4)
     wave_2 = Waves(screen, wave_image, position_x=950, position_y=620, speed=2.4)
     wave_3 = Waves(screen, wave_image, position_x=750, position_y=710, speed=2.4)
     waves = Group(wave_1, wave_2, wave_3)
 
     # create clouds objects and add it to the clouds group
-    cloud_image = pygame.image.load("cloud.png")
+    cloud_image = pygame.image.load("sprites/small_cloud.png")
     cloud_1 = Clouds(screen, cloud_image, position_x=600, position_y=50, speed=1.4)
     cloud_2 = Clouds(screen, cloud_image, position_x=300, position_y=130, speed=1.4)
     cloud_3 = Clouds(screen, cloud_image, position_x=1020, position_y=210, speed=1.4)
     clouds = Group(cloud_1, cloud_2, cloud_3)
 
     # add island image and object
-    island_image = pygame.image.load("island.png")
+    island_image = pygame.image.load("sprites/island.png")
     island = Background(screen, island_image, position_x=1150, position_y=320, speed=0.3)
 
     # add big cloud image and object
-    big_cloud_image = pygame.image.load("cloud-computing.png")
+    big_cloud_image = pygame.image.load("sprites/big_cloud.png")
     big_cloud = Background(screen, big_cloud_image, position_x=850, position_y=80, speed=0.8)
 
     # creating an explosion object

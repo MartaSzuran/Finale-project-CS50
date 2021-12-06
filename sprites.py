@@ -94,7 +94,7 @@ class Lives(Sprite):
         super().__init__()
         self.screen = screen
         # using .convert_alpha make image background transparent
-        self.image = pygame.image.load("heart.png").convert_alpha()
+        self.image = pygame.image.load("sprites/heart.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.screen_rect = self.screen.get_rect()
         self.position_y = 30
@@ -143,7 +143,7 @@ class Missile(Sprite):
         # simple syntax super().__init__()
         # creating missile
         self.screen = screen
-        self.image = pygame.image.load("missile.png")
+        self.image = pygame.image.load("sprites/missile.png")
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
@@ -175,7 +175,7 @@ class Explosion:
         """Initialize explosion object."""
         self.screen = screen
         # using .convert_alpha make image background transparent
-        self.image = pygame.image.load("explosion.png").convert_alpha()
+        self.image = pygame.image.load("sprites/explosion.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.screen_rect = self.screen.get_rect()
 
@@ -206,7 +206,7 @@ class Ship:
         """Initialize sea ship."""
         self.screen = screen
         # loading ship image and load its rect
-        self.image = pygame.image.load("ship.png")
+        self.image = pygame.image.load("sprites/ship.png")
         self.rect = self.image.get_rect()
         self.screen_rect = screen.get_rect()
 
