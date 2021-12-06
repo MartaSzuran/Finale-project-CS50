@@ -75,21 +75,21 @@ Create main menu with buttons:
 + exit - exit game - if pressed game is over
 
 * **game()**:
-	starts drawing screens and sprites, contain all game logic (score, creating torpedoes (missiles),
-	loosing hearts when torpedoes reach the ship) with some helpful function
-	(*create_letters()* - create letter above the torpedoes;
-	*create_collection_of_current_keys()* and *check_key()* - to grab pressed buttons from events
-	and check if player pressed appropiate once then change colour of letters to green;
-	*increase_dif_with_time()* - add another letter above the torpedo.
+    starts drawing screens and sprites, contain all game logic (score, creating torpedoes (missiles),
+    loosing hearts when torpedoes reach the ship) with some helpful function
+    (*create_letters()* - create letter above the torpedoes;
+    *create_collection_of_current_keys()* and *check_key()* - to grab pressed buttons from events
+    and check if player pressed appropiate once then change colour of letters to green;
+    *increase_dif_with_time()* - add another letter above the torpedo.
 
 --> after loosing all three hearts function *game_over()* launch:
-	show "game over" screen,
-	- if score is in top 10, ask player for name, after input,
-	save it with score in ranking.db file and run *ranking()* function
-	- else just inform that the game is over
+    show "game over" screen,
+    - if score is in top 10, ask player for name, after input,
+    save it with score in ranking.db file and run *ranking()* function
+    - else just inform that the game is over
 
 * **ranking()**:
-	open ranking.db file and print 10 highest scores (player name and score)
+    open ranking.db file and print 10 highest scores (player name and score)
 
 **sprites.py**
 contains:
