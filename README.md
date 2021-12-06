@@ -57,9 +57,9 @@ Good luck and have fun :)
 I use some help from:
 - CS50 course materials
 - python documentation
-- opis1 https://www.youtube.com/watch?v=byHcYRpMgI4
-- opis2 https://www.youtube.com/watch?v=FfWpgLFMI7w
-- opis3 https://www.youtube.com/watch?v=a5JWrd7Y_14
+- sqlite3: https://www.youtube.com/watch?v=byHcYRpMgI4
+- pygame game: https://www.youtube.com/watch?v=FfWpgLFMI7w
+- pygame menu: https://www.youtube.com/watch?v=a5JWrd7Y_14
 - sprites: wwww.flaticon.com
 
 ###### Detailed project architecture description:
