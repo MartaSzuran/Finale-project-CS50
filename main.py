@@ -18,6 +18,7 @@ pygame.init()
 # create screen
 screen = pygame.display.set_mode((1200, 800), 0, 32)
 pygame.display.set_caption("Shoot the letters")
+bg = pygame.image.load("sprites/background.png")
 
 # adding variable click to control players clicking
 click = False
@@ -156,6 +157,9 @@ def game():
 
         # screen refreshment
         screen.fill((0, 128, 255))
+
+        # make mouse invisible
+        pygame.mouse.set_visible(False)
 
         # color the screen sky
         sky = pygame.Rect((0, 0, 1200, 380))
@@ -321,9 +325,10 @@ def ranking():
     while running:
         # screen refreshment
         screen.fill((102, 255, 255))
+        screen.blit(bg, (0, 0))
 
         # add name to the option screen
-        draw_text("Ranking", pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 535, 70)
+        draw_text("Ranking", pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 535, 70)
 
         # setting star positions for table numbers
         y_position = 150
@@ -333,7 +338,7 @@ def ranking():
         change_x = 300
         for i in range(10):
             draw_text(str(i + 1), pygame.font.SysFont("Times New Roman", 30),
-                      (102, 102, 255), screen, x_position, y_position)
+                      (23, 23, 243), screen, x_position, y_position)
             y_position += change_y
 
         # set position to the start ones
@@ -343,15 +348,15 @@ def ranking():
         # print data from database file
         for row in data:
             draw_text(str(row[0]), pygame.font.SysFont("Times New Roman", 30),
-                      (102, 102, 255), screen, x_position, y_position)
+                      (23, 23, 243), screen, x_position, y_position)
             x_position += change_x
             draw_text(str(row[1]), pygame.font.SysFont("Times New Roman", 30),
-                      (102, 102, 255), screen, x_position, y_position)
+                      (23, 23, 243), screen, x_position, y_position)
             y_position += change_y
             x_position -= change_x
 
         draw_text("To exit press esc or space. ",
-                  pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 900, 750)
+                  pygame.font.SysFont("Times New Roman", 20), (23, 23, 243), screen, 900, 750)
 
         # waiting for press button or mouse button
         for event in pygame.event.get():
@@ -381,12 +386,13 @@ def game_over(score):
     score_on_the_list = False
 
     con = database_sql.create_connection("ranking.db")
+    database_sql.create_table(con)
     list_data = database_sql.format_data(con)
     if len(list_data) < 10:
-        score_10 = -61
+        score_10 = -1
     else:
         score_10 = database_sql.search_for_value(con)
-    print(score_10)
+    # print(score_10)
     database_sql.close_connection(con)
 
     running = True
@@ -394,22 +400,23 @@ def game_over(score):
     while running:
         # screen refreshment
         screen.fill((102, 255, 255))
+        screen.blit(bg, (0, 0))
 
         # add name to the option screen
-        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (102, 102, 255), screen, 320, 100)
-        draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 400, 220)
-        draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 700, 220)
+        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (23, 23, 243), screen, 320, 100)
+        draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 400, 220)
+        draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 700, 220)
 
         if score > score_10:
             draw_text("Well done you are on the top 10 list! ",
-                      pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 300, 320)
+                      pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 300, 320)
             draw_text("Write your name and press enter: ",
-                      pygame.font.SysFont("Times New Roman", 40), (102, 102, 255), screen, 310, 420)
+                      pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 310, 420)
             frame = pygame.Rect(450, 500, 250, 60)
             pygame.draw.rect(screen, color, frame, 2)
-            draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (102, 102, 255), screen, 480, 500)
+            draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (23, 23, 243), screen, 480, 500)
             draw_text("No more than 8 letters...",
-                      pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 475, 460)
+                      pygame.font.SysFont("Times New Roman", 20), (23, 23, 243), screen, 475, 460)
             score_on_the_list = True
 
         draw_text("To exit press esc. ", pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 950, 750)
@@ -458,9 +465,10 @@ def main_menu():
     while True:
         # screen refreshment
         screen.fill((102, 255, 255))
+        screen.blit(bg, (0, 0))
 
         # font_obj_name.render_to( where = screen, position(x=550, y=40), text to render= "Main menu", color = red)
-        draw_text("Main Menu", my_font, (102, 102, 255), screen, 535, 70)
+        draw_text("Main Menu", pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 510, 70)
 
         # mouse position
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -490,9 +498,9 @@ def main_menu():
         pygame.draw.rect(screen, (192, 192, 192), button_3)
 
         # draw text on the buttons
-        draw_text("Play", my_font, (0, 102, 204), screen, 580, 208)
-        draw_text("Ranking", my_font, (0, 102, 204), screen, 560, 308)
-        draw_text("Exit", my_font, (0, 102, 204), screen, 580, 408)
+        draw_text("Play", my_font, (23, 23, 243), screen, 580, 208)
+        draw_text("Ranking", my_font, (23, 23, 243), screen, 560, 308)
+        draw_text("Exit", my_font, (23, 23, 243), screen, 580, 408)
 
         # set click to False
         click = False
@@ -501,7 +509,7 @@ def main_menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            if event.type == pygame.K_DOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
