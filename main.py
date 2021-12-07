@@ -18,6 +18,7 @@ pygame.init()
 # create screen
 screen = pygame.display.set_mode((1200, 800), 0, 32)
 pygame.display.set_caption("Shoot the letters")
+# load background image
 bg = pygame.image.load("sprites/background.png")
 
 # adding variable click to control players clicking
@@ -25,13 +26,14 @@ click = False
 
 
 def create_letters(position_x, position_y, numb):
-    """Make objects of class letters equal to the length of key_letters list"""
+    """Make objects of class letters equal to the length of key_letters list."""
     # parameter to change position_x of each letter
     change_x = -10
     # create list of randomly chosen letters objects
     letters = sprites.choose_the_letter(numb)
     # create list of letters object
     letters_obj = []
+
     for letter in letters:
         # control the way letters obj are draw on the screen by changing position_x
         if letter in ["w", "m"]:
@@ -46,11 +48,12 @@ def create_letters(position_x, position_y, numb):
             letter = Letter(screen, (position_x + change_x), position_y, letter)
             letters_obj.append(letter)
             change_x += 25
+
     return letters_obj
 
 
 def create_collection_of_current_keys(collection_of_letters_objects):
-    # create list of keys
+    """Create list of keys letters"""
     keys = []
     for letter in collection_of_letters_objects:
         key_letter = letter.letter
@@ -58,8 +61,8 @@ def create_collection_of_current_keys(collection_of_letters_objects):
     return keys
 
 
-# add function to erase all colors if the wrong letter is pressed
 def check_key(collection_of_letters_objects, counter, bool_key):
+    """Check_key function change the color of letters object"""
     if bool_key:
         letter_counter = 0
         for letter in collection_of_letters_objects:
@@ -82,6 +85,7 @@ def increase_dif_with_time(numb_of_letters, timer, time_delta):
 
 # game
 def game():
+    """Contains game logic and sprites."""
     # initialize time
     timer = Watch()
 
@@ -145,6 +149,9 @@ def game():
     # number of missiles that hit the ship
     missile_hit_the_ship = 0
 
+    # make mouse invisible
+    pygame.mouse.set_visible(False)
+
     # control if player want to play
     running = True
 
@@ -157,9 +164,6 @@ def game():
 
         # screen refreshment
         screen.fill((0, 128, 255))
-
-        # make mouse invisible
-        pygame.mouse.set_visible(False)
 
         # color the screen sky
         sky = pygame.Rect((0, 0, 1200, 380))
@@ -232,9 +236,11 @@ def game():
                     # counter for changing color of letters objects
                     counter = 0
                 else:
-                    draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (0, 0, 0), screen, 420, 200)
+                    draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (23, 23, 243), screen, 420, 200)
                     pygame.display.flip()
                     timer.countdown(1)
+                    # make mouse visible
+                    pygame.mouse.set_visible(True)
                     running = False
                 # print(score)
                 # missile come close to the ship missile remove
@@ -316,6 +322,7 @@ def game():
 
 # show rating screen
 def ranking():
+    """Show first 10 the highest score from the database file."""
     running = True
 
     con = database_sql.create_connection("ranking.db")
@@ -377,8 +384,8 @@ def ranking():
 
 
 def game_over(score):
-    """Create screen game over and if players score is in first 10 scores in ranking ask for his/her name."""
-    # create an empty string for players name
+    """Create screen game over and if player score is in first 10 scores in ranking ask for his name."""
+    # create an empty string for player name
     player_name = ""
 
     # color to create frame for user input
@@ -388,11 +395,15 @@ def game_over(score):
     con = database_sql.create_connection("ranking.db")
     database_sql.create_table(con)
     list_data = database_sql.format_data(con)
+    # if there are less then 10 scores in the database file
+    # need to insert even minus once on the top 10 ranking
     if len(list_data) < 10:
-        score_10 = -1
+        # in case when player press all the time wrong buttons
+        score_10th = -1000
     else:
-        score_10 = database_sql.search_for_value(con)
-    # print(score_10)
+        # take last 10th score
+        score_10th = database_sql.search_for_value(con)
+    # print(score_10th)
     database_sql.close_connection(con)
 
     running = True
@@ -402,21 +413,22 @@ def game_over(score):
         screen.fill((102, 255, 255))
         screen.blit(bg, (0, 0))
 
-        # add name to the option screen
-        draw_text("YOU HAVE LOST!!!", pygame.font.SysFont("Times New Roman", 60), (23, 23, 243), screen, 320, 100)
+        draw_text("Game over", pygame.font.SysFont("Times New Roman", 60), (23, 23, 243), screen, 430, 100)
         draw_text("Your score is: ", pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 400, 220)
         draw_text(str(score), pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 700, 220)
 
-        if score > score_10:
+        # check if score is bigger then 10th saved in database
+        # if is bigger ask for name and record the score in database
+        if score > score_10th:
             draw_text("Well done you are on the top 10 list! ",
                       pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 300, 320)
             draw_text("Write your name and press enter: ",
-                      pygame.font.SysFont("Times New Roman", 40), (23, 23, 243), screen, 310, 420)
+                      pygame.font.SysFont("Times New Roman", 40), "azure3", screen, 310, 420)
             frame = pygame.Rect(450, 500, 250, 60)
             pygame.draw.rect(screen, color, frame, 2)
             draw_text(player_name, pygame.font.SysFont("Times New Roman", 50), (23, 23, 243), screen, 480, 500)
             draw_text("No more than 8 letters...",
-                      pygame.font.SysFont("Times New Roman", 20), (23, 23, 243), screen, 475, 460)
+                      pygame.font.SysFont("Times New Roman", 20), "azure3", screen, 475, 460)
             score_on_the_list = True
 
         draw_text("To exit press esc. ", pygame.font.SysFont("Times New Roman", 20), (102, 102, 255), screen, 950, 750)
@@ -449,6 +461,8 @@ def game_over(score):
                         running = False
 
                 else:
+                    # event.unicode let player write his name with any letter or sign he wants
+                    # add this to the string player_name
                     player_name += event.unicode
                     if len(player_name) > 8:
                         player_name = player_name[:-1]
