@@ -239,8 +239,6 @@ def game():
                     draw_text("GAME OVER", pygame.font.SysFont("Verdana", 60), (23, 23, 243), screen, 420, 200)
                     pygame.display.flip()
                     timer.countdown(1)
-                    # make mouse visible
-                    pygame.mouse.set_visible(True)
                     running = False
                 # print(score)
                 # missile come close to the ship missile remove
@@ -325,7 +323,11 @@ def ranking():
     """Show first 10 the highest score from the database file."""
     running = True
 
+    # make mouse visible
+    pygame.mouse.set_visible(True)
+
     con = database_sql.create_connection("ranking.db")
+    database_sql.create_table(con)
     data = database_sql.format_data(con)
     database_sql.close_connection(con)
 

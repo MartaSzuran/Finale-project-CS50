@@ -1,5 +1,5 @@
 # Finale_project_CS50
-## Video Demo: HERE&gt;
+## Video Demo: https://youtu.be/V4kkVdkXAas
 ## Game: **"Shoot the letters!"**
 
 ## PLOT
